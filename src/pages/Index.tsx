@@ -32,20 +32,20 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto">
-        <Tabs defaultValue="mapa" className="w-full">
-          <div className="bg-card border-b border-border px-6">
-            <TabsList className="bg-transparent border-0 h-auto p-0">
-              <TabsTrigger
-                value="mapa"
-                className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-6 py-4"
-              >
-                Mapa
-              </TabsTrigger>
+        <Tabs defaultValue="lista" className="w-full">
+          <div className="bg-card border-b border-border">
+            <TabsList className="bg-transparent border-0 h-auto p-0 w-full grid grid-cols-2">
               <TabsTrigger
                 value="lista"
                 className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-6 py-4"
               >
                 Lista
+              </TabsTrigger>
+              <TabsTrigger
+                value="mapa"
+                className="data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none px-6 py-4"
+              >
+                Mapa
               </TabsTrigger>
             </TabsList>
           </div>
