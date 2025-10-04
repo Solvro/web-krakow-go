@@ -7,6 +7,8 @@ import { Calendar, Pencil } from 'lucide-react';
 import BadgeCard from '@/components/BadgeCard';
 import { mockBadges } from '@/data/mockBadges';
 import { api } from '@/services/api';
+import { generateCertificate } from '@/utils/certificateGenerator';
+import { toast } from 'sonner';
 import ekoInicjatywa from '@/assets/badges/eko-inicjatywa.png';
 import straznikCzystosci from '@/assets/badges/straznik-czystosci.png';
 import pomocnaLapa from '@/assets/badges/pomocna-lapa.png';
@@ -79,6 +81,41 @@ const Profile = () => {
 
   const age = Math.floor((new Date().getTime() - new Date(volunteer.birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
   const totalHours = volunteer.certificates.reduce((sum: number, cert: any) => sum + (cert.tasksCount * 2), 0);
+
+  const handleDownloadCertificate = async (certificate: any) => {
+    try {
+      // Fetch event details for the certificate
+      const event = await api.getEventById(certificate.eventId);
+      
+      if (!event) {
+        toast.error('Nie udało się pobrać szczegółów wydarzenia');
+        return;
+      }
+
+      // Fetch organization name
+      const response = await api.getEvents();
+      const eventWithOrg = response.find(e => e.id === certificate.eventId);
+      
+      await generateCertificate({
+        volunteerId: volunteer.id,
+        volunteerName: volunteer.name,
+        volunteerEmail: volunteer.email,
+        eventId: certificate.eventId,
+        eventTitle: event.title,
+        organizationName: eventWithOrg?.organizationId || 'Organizacja',
+        points: certificate.points,
+        tasksCount: certificate.tasksCount,
+        issuedAt: certificate.issuedAt,
+        startDate: event.startDate,
+        endDate: event.endDate,
+      });
+      
+      toast.success('Certyfikat został pobrany');
+    } catch (error) {
+      console.error('Error generating certificate:', error);
+      toast.error('Wystąpił błąd podczas generowania certyfikatu');
+    }
+  };
 
   return (
     <Layout title="Profil">
@@ -158,7 +195,11 @@ const Profile = () => {
                       </p>
                     </div>
                   </div>
-                  <Button variant="ghost" className="text-primary">
+                  <Button 
+                    variant="ghost" 
+                    className="text-primary"
+                    onClick={() => handleDownloadCertificate(certificate)}
+                  >
                     Pobierz
                   </Button>
                 </div>
