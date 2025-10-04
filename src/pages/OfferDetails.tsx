@@ -53,6 +53,75 @@ const OfferDetails = () => {
     setIsDialogOpen(true);
   };
 
+  const handleChatWithOrganizer = async () => {
+    if (!offer) return;
+    
+    try {
+      const volunteerId = 'vol-ania';
+      
+      // Check if a private chat with this organizer already exists
+      const { data: existingChats } = await supabase
+        .from('Chat')
+        .select('id, ChatParticipant!inner(*)')
+        .eq('type', 'PRIVATE')
+        .eq('ChatParticipant.volunteerId', volunteerId);
+      
+      // Find a chat that includes the organizer
+      const { data: event } = await supabase
+        .from('Event')
+        .select('organizationId')
+        .eq('id', offer.id)
+        .single();
+      
+      const existingChat = existingChats?.find(chat => 
+        chat.ChatParticipant.some((p: any) => p.organizationId === event?.organizationId)
+      );
+      
+      if (existingChat) {
+        // Navigate to existing chat
+        navigate(`/czaty/${existingChat.id}`);
+      } else {
+        // Create new private chat
+        const newChatId = `chat-${Date.now()}`;
+        
+        await supabase.from('Chat').insert({
+          id: newChatId,
+          type: 'PRIVATE',
+          eventId: null,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        });
+        
+        // Add participants
+        await supabase.from('ChatParticipant').insert([
+          {
+            id: `cp-${Date.now()}-1`,
+            chatId: newChatId,
+            volunteerId: volunteerId,
+            organizationId: null,
+            createdAt: new Date().toISOString()
+          },
+          {
+            id: `cp-${Date.now()}-2`,
+            chatId: newChatId,
+            volunteerId: null,
+            organizationId: event?.organizationId,
+            createdAt: new Date().toISOString()
+          }
+        ]);
+        
+        navigate(`/czaty/${newChatId}`);
+      }
+    } catch (err) {
+      console.error('Error creating chat:', err);
+      toast({
+        title: "Błąd",
+        description: "Nie udało się otworzyć czatu. Spróbuj ponownie.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleRegistration = async () => {
     if (!id) return;
     
@@ -534,6 +603,7 @@ const OfferDetails = () => {
               <Button 
                 size="icon"
                 variant="outline"
+                onClick={handleChatWithOrganizer}
                 className="shrink-0 w-14 h-14 rounded-full bg-primary/5 border-primary/20 hover:bg-primary/10"
               >
                 <MessageCircle className="w-6 h-6 text-primary" />
