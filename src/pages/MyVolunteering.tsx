@@ -39,7 +39,7 @@ const MyVolunteering = () => {
   };
 
   return (
-    <Layout title="Mój Wolontariat" showBackButton>
+    <Layout title="Mój Wolontariat">
       <div className="max-w-3xl mx-auto px-6 py-6 space-y-8">
         {/* Current and Pending Section */}
         <section>
