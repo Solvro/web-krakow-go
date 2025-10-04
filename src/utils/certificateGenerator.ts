@@ -56,7 +56,7 @@ export const generateCertificate = async (data: CertificateData) => {
   
   let yPosition = 65;
   
-  pdf.text('Niniejszym poświadczamy, że', pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text('Niniejszym poswiadczamy, ze', pageWidth / 2, yPosition, { align: 'center' });
   
   // Volunteer name
   yPosition += 15;
@@ -70,7 +70,7 @@ export const generateCertificate = async (data: CertificateData) => {
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(14);
   pdf.setTextColor(68, 68, 68);
-  pdf.text('brał/a udział w akcji wolontariackiej', pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text('bral/a udzial w akcji wolontariackiej', pageWidth / 2, yPosition, { align: 'center' });
   
   // Event title
   yPosition += 15;
@@ -92,43 +92,42 @@ export const generateCertificate = async (data: CertificateData) => {
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(12);
   
-  const leftColumn = 60;
-  const rightColumn = pageWidth - 60;
-  
-  pdf.text('Szczegóły uczestnictwa:', leftColumn, yPosition);
+  pdf.text('Szczegoly uczestnictwa:', pageWidth / 2, yPosition, { align: 'center' });
   
   yPosition += 10;
   pdf.setFont('helvetica', 'normal');
-  pdf.text(`Liczba wykonanych zadań: ${data.tasksCount}`, leftColumn, yPosition);
   
-  yPosition += 8;
-  pdf.text(`Zdobyte punkty: ${data.points}`, leftColumn, yPosition);
-  
-  yPosition += 8;
+  // Center-aligned details
   const estimatedHours = data.tasksCount * 2;
-  pdf.text(`Szacowany czas zaangażowania: ${estimatedHours} godzin`, leftColumn, yPosition);
   
-  // Date and signature section
-  yPosition = pageHeight - 40;
-  pdf.setFont('helvetica', 'normal');
-  pdf.setFontSize(11);
+  pdf.text(`Liczba wykonanych zadan: ${data.tasksCount}`, pageWidth / 2, yPosition, { align: 'center' });
   
+  yPosition += 8;
+  pdf.text(`Zdobyte punkty: ${data.points}`, pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 8;
   const issueDate = new Date(data.issuedAt).toLocaleDateString('pl-PL', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
-  });
+  }).replace(/ą/g, 'a').replace(/ć/g, 'c').replace(/ę/g, 'e').replace(/ł/g, 'l')
+    .replace(/ń/g, 'n').replace(/ó/g, 'o').replace(/ś/g, 's').replace(/ź/g, 'z').replace(/ż/g, 'z');
   
-  pdf.text(`Data wystawienia: ${issueDate}`, leftColumn, yPosition);
+  pdf.text(`Data wystawienia: ${issueDate}`, pageWidth / 2, yPosition, { align: 'center' });
+  
+  yPosition += 8;
+  pdf.text(`Szacowany czas zaangazowania: ${estimatedHours} godzin`, pageWidth / 2, yPosition, { align: 'center' });
   
   // Footer
-  yPosition += 15;
+  yPosition = pageHeight - 30;
   pdf.setFontSize(9);
   pdf.setTextColor(120, 120, 120);
   pdf.text('Potwierdzenie uczestnictwa w wolontariacie', pageWidth / 2, yPosition, { align: 'center' });
-  pdf.text(`ID Certyfikatu: ${data.eventId.substring(0, 8).toUpperCase()}`, pageWidth / 2, yPosition + 5, { align: 'center' });
+  
+  yPosition += 5;
+  pdf.text(`ID Certyfikatu: ${data.eventTitle.substring(0, 20).toUpperCase()}`, pageWidth / 2, yPosition, { align: 'center' });
 
   // Save PDF
-  const fileName = `Certyfikat_${data.volunteerName.replace(/\s+/g, '_')}_${data.eventId.substring(0, 8)}.pdf`;
+  const fileName = `Certyfikat_${data.volunteerName.replace(/\s+/g, '_')}_${data.eventTitle.substring(0, 10).replace(/\s+/g, '_')}.pdf`;
   pdf.save(fileName);
 };
