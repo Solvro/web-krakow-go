@@ -22,7 +22,7 @@ const BottomNavigation = () => {
       id: 'profile',
       label: 'Profil',
       icon: User,
-      path: '/profil',
+      path: '/profil/vol-ania',
     },
   ];
 
