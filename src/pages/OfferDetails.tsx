@@ -124,6 +124,7 @@ const OfferDetails = () => {
           <Button 
             className="w-full h-14 text-lg font-semibold rounded-xl"
             size="lg"
+            onClick={() => navigate(`/oferta/${id}/zglos`)}
           >
             Zgłoś się
           </Button>
