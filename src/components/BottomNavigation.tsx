@@ -1,4 +1,4 @@
-import { Search, HandHeart, User } from 'lucide-react';
+import { Search, HandHeart, User, MessageCircle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNavigation = () => {
@@ -14,9 +14,15 @@ const BottomNavigation = () => {
     },
     {
       id: 'volunteering',
-      label: 'Mój Wolontariat',
+      label: 'Wolontariat',
       icon: HandHeart,
       path: '/moj-wolontariat',
+    },
+    {
+      id: 'chats',
+      label: 'Czaty',
+      icon: MessageCircle,
+      path: '/czaty',
     },
     {
       id: 'profile',
@@ -29,6 +35,9 @@ const BottomNavigation = () => {
   const isActive = (path: string) => {
     if (path === '/') {
       return location.pathname === '/' || location.pathname.startsWith('/oferta/');
+    }
+    if (path === '/czaty') {
+      return location.pathname === '/czaty' || location.pathname.startsWith('/czaty/');
     }
     return location.pathname === path;
   };

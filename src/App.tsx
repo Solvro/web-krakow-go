@@ -15,6 +15,8 @@ import NotFound from "./pages/NotFound";
 import OrganizerDashboard from "./pages/organizer/OrganizerDashboard";
 import NewEvent from "./pages/organizer/NewEvent";
 import EventDetails from "./pages/organizer/EventDetails";
+import Chats from "./pages/Chats";
+import ChatRoom from "./pages/ChatRoom";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +46,8 @@ const App = () => (
                 <Profile />
               </AuthGuard>
             } />
+            <Route path="/czaty" element={<Chats />} />
+            <Route path="/czaty/:id" element={<ChatRoom />} />
             <Route path="/organizator" element={<OrganizerDashboard />} />
             <Route path="/organizator/nowe-wydarzenie" element={<NewEvent />} />
             <Route path="/organizator/wydarzenie/:id" element={<EventDetails />} />
