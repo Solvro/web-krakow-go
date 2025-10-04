@@ -34,4 +34,18 @@ export const api = {
       updatedAt: event.updatedAt,
     }));
   },
+
+  async getEventById(id: string): Promise<ApiEvent | null> {
+    const { data, error } = await supabase
+      .from('Event')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+    
+    if (error) {
+      throw new Error('Failed to fetch event');
+    }
+    
+    return data;
+  },
 };
