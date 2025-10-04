@@ -76,7 +76,7 @@ const MyVolunteering = () => {
   );
   
   const completedApplications = applications.filter(
-    app => app.status === 'COMPLETED'
+    app => app.status === 'COMPLETED' || app => app.status === 'REJECTED'
   );
 
   const getStatusBadge = (status: SubmissionStatus) => {
