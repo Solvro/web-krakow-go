@@ -16,11 +16,11 @@ interface CertificateData {
 
 export const generateCertificate = async (data: CertificateData) => {
   const COLORS = {
-    background: [254, 243, 229], // bg-orange-50
-    borderOuter: [251, 146, 60], // orange-400
-    borderInner: [253, 186, 116], // orange-300
-    accent: [234, 88, 12], // orange-600
-    text: [68, 68, 68], // neutral text
+    background: [254, 243, 229] as const, // bg-orange-50
+    borderOuter: [251, 146, 60] as const, // orange-400
+    borderInner: [253, 186, 116] as const, // orange-300
+    accent: [234, 88, 12] as const, // orange-600
+    text: [68, 68, 68] as const, // neutral text
   };
 
   const pdf = new jsPDF({
