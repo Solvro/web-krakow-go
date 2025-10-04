@@ -23,6 +23,7 @@ const Profile = () => {
   const [volunteer, setVolunteer] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [events, setEvents] = useState<{ [key: string]: any }>({});
 
   useEffect(() => {
     const fetchVolunteer = async () => {
@@ -33,6 +34,21 @@ const Profile = () => {
         const data = await api.getVolunteerById(volunteerId);
         if (data) {
           setVolunteer(data);
+          
+          // Fetch event details for all certificates
+          const eventPromises = data.certificates.map((cert: any) => 
+            api.getEventById(cert.eventId)
+          );
+          const eventData = await Promise.all(eventPromises);
+          
+          const eventsMap = eventData.reduce((acc, event) => {
+            if (event) {
+              acc[event.id] = event;
+            }
+            return acc;
+          }, {} as { [key: string]: any });
+          
+          setEvents(eventsMap);
         } else {
           setError('Nie znaleziono wolontariusza');
         }
@@ -190,7 +206,9 @@ const Profile = () => {
                       <Calendar className="w-6 h-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-medium">Certyfikat</h3>
+                      <h3 className="font-medium">
+                        {events[certificate.eventId]?.title || 'Ładowanie...'}
+                      </h3>
                       <p className="text-sm text-muted-foreground">
                         Punkty: {certificate.points} | Zadania: {certificate.tasksCount}
                       </p>
