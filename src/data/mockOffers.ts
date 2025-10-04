@@ -1,0 +1,58 @@
+import { VolunteerOffer } from '@/components/VolunteerCard';
+
+export const mockOffers: VolunteerOffer[] = [
+  {
+    id: '1',
+    title: 'Wolontariat w schronisku',
+    description: 'Pomoc w opiece nad zwierzętami.',
+    location: 'ul. Smocza 12, Kraków',
+    time: '10:00 - 14:00',
+    dateLabel: 'Dziś',
+    dateType: 'today',
+  },
+  {
+    id: '2',
+    title: 'Sprzątanie parku',
+    description: 'Wspólne sprzątanie Parku Jordana.',
+    location: 'Park Jordana, Kraków',
+    time: '09:00 - 12:00',
+    dateLabel: 'Jutro',
+    dateType: 'tomorrow',
+  },
+  {
+    id: '3',
+    title: 'Pomoc w domu seniora',
+    description: 'Towarzystwo i rozmowy z pensjonariuszami.',
+    location: 'ul. Kazimierza Wielkiego 23, Kraków',
+    time: '15:00 - 18:00',
+    dateLabel: 'Wtorek',
+    dateType: 'future',
+  },
+  {
+    id: '4',
+    title: 'Warsztaty dla dzieci',
+    description: 'Prowadzenie zajęć plastycznych dla dzieci.',
+    location: 'Centrum Kultury, ul. Dietla 50, Kraków',
+    time: '14:00 - 16:00',
+    dateLabel: 'Środa',
+    dateType: 'future',
+  },
+  {
+    id: '5',
+    title: 'Pomoc w jadłodajni',
+    description: 'Wydawanie posiłków dla osób potrzebujących.',
+    location: 'ul. Józefińska 16, Kraków',
+    time: '12:00 - 15:00',
+    dateLabel: 'Czwartek',
+    dateType: 'future',
+  },
+  {
+    id: '6',
+    title: 'Zbiórka odzieży',
+    description: 'Sortowanie i pakowanie darów odzieżowych.',
+    location: 'Magazyn, ul. Lipowa 5, Kraków',
+    time: '10:00 - 13:00',
+    dateLabel: 'Piątek',
+    dateType: 'future',
+  },
+];
