@@ -1,18 +1,20 @@
 interface BadgeCardProps {
-  icon: React.ReactNode;
+  image: string;
   title: string;
   earned: boolean;
 }
 
-const BadgeCard = ({ icon, title, earned }: BadgeCardProps) => {
+const BadgeCard = ({ image, title, earned }: BadgeCardProps) => {
   return (
     <div className="flex flex-col items-center gap-2">
-      <div className={`w-16 h-16 flex items-center justify-center rounded-lg ${
-        earned ? 'opacity-100' : 'opacity-40'
+      <img 
+        src={image} 
+        alt={title}
+        className={`w-16 h-16 ${earned ? 'opacity-100' : 'opacity-30'}`}
+      />
+      <p className={`text-xs text-center max-w-[80px] ${
+        earned ? 'text-muted-foreground' : 'text-muted-foreground/40'
       }`}>
-        {icon}
-      </div>
-      <p className="text-xs text-center text-muted-foreground max-w-[80px]">
         {title}
       </p>
     </div>

@@ -1,3 +1,5 @@
+import avatarAnna from '@/assets/avatar-anna.png';
+
 export interface UserProfile {
   id: string;
   name: string;
@@ -25,6 +27,7 @@ export const mockUserProfile: UserProfile = {
   skills: 'Pomoc dzieciom, organizacja wydarzeń, komunikacja interpersonalna, praca zespołowa',
   totalHours: 45,
   totalBadges: 3,
+  avatar: avatarAnna,
 };
 
 export const mockUserVolunteering: UserVolunteering[] = [

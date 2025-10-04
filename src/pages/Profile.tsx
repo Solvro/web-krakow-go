@@ -1,27 +1,27 @@
 import Layout from '@/components/Layout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Calendar, Pencil, Leaf, Trash2, Heart, Sparkles, ClipboardCheck, Users, Package } from 'lucide-react';
+import { Calendar, Pencil } from 'lucide-react';
 import BadgeCard from '@/components/BadgeCard';
 import { mockUserProfile, mockUserVolunteering } from '@/data/mockUserProfile';
 import { mockBadges } from '@/data/mockBadges';
+import ekoInicjatywa from '@/assets/badges/eko-inicjatywa.png';
+import straznikCzystosci from '@/assets/badges/straznik-czystosci.png';
+import pomocnaLapa from '@/assets/badges/pomocna-lapa.png';
+import adopcyjnyCzarodziej from '@/assets/badges/adopcyjny-czarodziej.png';
+import perfekcyjnyPlan from '@/assets/badges/perfekcyjny-plan.png';
+import liderZespolu from '@/assets/badges/lider-zespolu.png';
+import mistrzLogistyki from '@/assets/badges/mistrz-logistyki.png';
 
 const Profile = () => {
-  const getBadgeIcon = (iconName: string, color: string) => {
-    const iconClass = `w-8 h-8 ${color.replace('bg-', 'text-')}`;
-    const bgClass = color;
-    
-    const icons: { [key: string]: React.ReactNode } = {
-      'leaf': <div className={`${bgClass} p-3 rounded-lg`}><Leaf className={iconClass.replace('text-', 'text-white ')} /></div>,
-      'trash-2': <div className={`${bgClass} p-3 rounded-lg`}><Trash2 className={iconClass.replace('text-', 'text-white ')} /></div>,
-      'heart': <div className={`${bgClass} p-3 rounded-lg`}><Heart className={iconClass.replace('text-', 'text-white ')} /></div>,
-      'sparkles': <div className={`${bgClass} p-3 rounded-lg`}><Sparkles className={iconClass.replace('text-', 'text-white ')} /></div>,
-      'clipboard-check': <div className={`${bgClass} p-3 rounded-lg`}><ClipboardCheck className={iconClass.replace('text-', 'text-white ')} /></div>,
-      'users': <div className={`${bgClass} p-3 rounded-lg`}><Users className={iconClass.replace('text-', 'text-white ')} /></div>,
-      'package': <div className={`${bgClass} p-3 rounded-lg`}><Package className={iconClass.replace('text-', 'text-white ')} /></div>,
-    };
-    
-    return icons[iconName];
+  const badgeImages: { [key: string]: string } = {
+    'eko-inicjatywa': ekoInicjatywa,
+    'straznik-czystosci': straznikCzystosci,
+    'pomocna-lapa': pomocnaLapa,
+    'adopcyjny-czarodziej': adopcyjnyCzarodziej,
+    'perfekcyjny-plan': perfekcyjnyPlan,
+    'lider-zespolu': liderZespolu,
+    'mistrz-logistyki': mistrzLogistyki,
   };
 
   const badgesByCategory = mockBadges.reduce((acc, badge) => {
@@ -78,7 +78,7 @@ const Profile = () => {
                   {badges.map((badge) => (
                     <BadgeCard
                       key={badge.id}
-                      icon={getBadgeIcon(badge.icon, badge.color)}
+                      image={badgeImages[badge.image]}
                       title={badge.title}
                       earned={badge.earned}
                     />
