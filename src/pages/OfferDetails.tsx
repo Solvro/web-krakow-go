@@ -11,6 +11,7 @@ import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
 import { VolunteerOffer } from '@/components/VolunteerCard';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import Map from '@/components/Map';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
@@ -29,6 +30,7 @@ const OfferDetails = () => {
   const [organizationName, setOrganizationName] = useState<string>('Organizator');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentSubmission, setCurrentSubmission] = useState<any>(null);
+  const [eventCoordinates, setEventCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   
   const handleRegistration = async () => {
     if (!id) return;
@@ -104,6 +106,7 @@ const OfferDetails = () => {
         const event = await api.getEventById(id);
         if (event) {
           setOffer(mapEventToVolunteerOffer(event));
+          setEventCoordinates({ lat: event.latitude, lng: event.longitude });
           
           // Fetch organization name
           const { data: organization } = await supabase
@@ -336,12 +339,17 @@ const OfferDetails = () => {
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-foreground mb-1">Miejsce spotkania</h4>
-                        <p className="text-foreground">Rynek Główny, pomnik Adama Mickiewicza</p>
-                        <p className="text-muted-foreground mb-3">31-042 Kraków</p>
-                        {/* Placeholder dla mapy */}
-                        <div className="w-full h-40 bg-muted rounded-lg flex items-center justify-center">
-                          <MapPin className="w-8 h-8 text-muted-foreground" />
-                        </div>
+                        <p className="text-foreground">{offer.location}</p>
+                        <p className="text-muted-foreground mb-3">Kraków</p>
+                        {eventCoordinates && (
+                          <div className="w-full h-40 rounded-lg overflow-hidden">
+                            <Map 
+                              latitude={eventCoordinates.lat} 
+                              longitude={eventCoordinates.lng}
+                              placeName={offer.location}
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
