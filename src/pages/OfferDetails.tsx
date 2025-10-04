@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, MapPin, Lightbulb, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import BottomNavigation from '@/components/BottomNavigation';
 import { mockOffers } from '@/data/mockOffers';
 
 const OfferDetails = () => {
@@ -18,7 +19,7 @@ const OfferDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-24">
       {/* Header */}
       <header className="bg-card border-b border-border px-6 py-4 sticky top-0 z-10">
         <div className="max-w-3xl mx-auto flex items-center gap-4">
@@ -119,7 +120,7 @@ const OfferDetails = () => {
       </div>
 
       {/* Fixed Bottom Button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-card border-t border-border p-6">
+      <div className="fixed bottom-20 left-0 right-0 bg-card border-t border-border p-6 z-40">
         <div className="max-w-3xl mx-auto">
           <Button 
             className="w-full h-14 text-lg font-semibold rounded-xl"
@@ -130,6 +131,8 @@ const OfferDetails = () => {
           </Button>
         </div>
       </div>
+
+      <BottomNavigation />
     </div>
   );
 };

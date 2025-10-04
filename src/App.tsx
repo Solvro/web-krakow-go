@@ -8,6 +8,8 @@ import Index from "./pages/Index";
 import OfferDetails from "./pages/OfferDetails";
 import ApplicationForm from "./pages/ApplicationForm";
 import Login from "./pages/Login";
+import MyVolunteering from "./pages/MyVolunteering";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +26,8 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/oferta/:id" element={<OfferDetails />} />
             <Route path="/oferta/:id/zglos" element={<ApplicationForm />} />
+            <Route path="/moj-wolontariat" element={<MyVolunteering />} />
+            <Route path="/profil" element={<Profile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

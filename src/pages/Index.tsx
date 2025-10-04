@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import VolunteerCard from '@/components/VolunteerCard';
 import Map from '@/components/Map';
+import BottomNavigation from '@/components/BottomNavigation';
 import { mockOffers } from '@/data/mockOffers';
 
 const Index = () => {
@@ -19,7 +20,7 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pb-24">
       {/* Header */}
       <header className="bg-card border-b border-border px-6 py-4 sticky top-0 z-20">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
@@ -133,6 +134,8 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      <BottomNavigation />
     </div>
   );
 };
