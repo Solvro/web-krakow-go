@@ -12,6 +12,9 @@ import Login from "./pages/Login";
 import MyVolunteering from "./pages/MyVolunteering";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import OrganizerDashboard from "./pages/organizer/OrganizerDashboard";
+import NewEvent from "./pages/organizer/NewEvent";
+import EventDetails from "./pages/organizer/EventDetails";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +44,9 @@ const App = () => (
                 <Profile />
               </AuthGuard>
             } />
+            <Route path="/organizator" element={<OrganizerDashboard />} />
+            <Route path="/organizator/nowe-wydarzenie" element={<NewEvent />} />
+            <Route path="/organizator/wydarzenie/:id" element={<EventDetails />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
