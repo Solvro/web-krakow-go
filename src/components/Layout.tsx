@@ -16,7 +16,6 @@ const Layout = ({
   children, 
   title, 
   showBackButton = false, 
-  showNotifications = false,
   showBottomNav = true 
 }: LayoutProps) => {
   const navigate = useNavigate();
@@ -39,12 +38,6 @@ const Layout = ({
           <h1 className={`font-semibold text-foreground flex-1 ${!showBackButton ? 'text-2xl font-bold' : 'text-lg'}`}>
             {title}
           </h1>
-          
-          {showNotifications && (
-            <Button variant="ghost" size="icon">
-              <Bell className="w-5 h-5" />
-            </Button>
-          )}
         </div>
       </header>
 
