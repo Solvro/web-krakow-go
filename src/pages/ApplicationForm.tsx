@@ -1,5 +1,4 @@
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
@@ -9,7 +8,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
 import Layout from '@/components/Layout';
 
 const formSchema = z.object({
@@ -22,16 +20,8 @@ const formSchema = z.object({
 const ApplicationForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
-  const { isAuthenticated } = useAuth();
   
   const offer = mockOffers.find(o => o.id === id);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login', { state: { from: location }, replace: true });
-    }
-  }, [isAuthenticated, navigate, location]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

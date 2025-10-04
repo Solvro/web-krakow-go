@@ -1,6 +1,3 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
 import Layout from '@/components/Layout';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,19 +5,6 @@ import { Calendar, CheckCircle } from 'lucide-react';
 import { mockApplications, ApplicationStatus } from '@/data/mockApplications';
 
 const MyVolunteering = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login', { state: { from: { pathname: '/moj-wolontariat' } } });
-    }
-  }, [isAuthenticated, navigate]);
-
-  if (!isAuthenticated) {
-    return null;
-  }
-
   const currentApplications = mockApplications.filter(
     app => app.status === 'accepted' || app.status === 'pending'
   );
