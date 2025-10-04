@@ -85,7 +85,7 @@ export const generateCertificate = async (data: CertificateData) => {
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(14);
   pdf.setTextColor(68, 68, 68);
-  pdf.text(`zorganizowanej przez ${data.organizationName}`, pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text(`zorganizowanej przez: ${data.organizationName}`, pageWidth / 2, yPosition, { align: 'center' });
   
   // Details section
   yPosition += 20;
