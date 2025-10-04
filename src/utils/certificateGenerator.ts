@@ -16,10 +16,10 @@ interface CertificateData {
 
 export const generateCertificate = async (data: CertificateData) => {
   const COLORS = {
-    background: [254, 243, 229] as const, // bg-orange-50
+    background: [246, 246, 246] as const, // bg-orange-50
     borderOuter: [251, 146, 60] as const, // orange-400
     borderInner: [253, 186, 116] as const, // orange-300
-    accent: [234, 88, 12] as const, // orange-600
+    accent: [49, 122, 181] as const, // orange-600
     text: [68, 68, 68] as const, // neutral text
   };
 
