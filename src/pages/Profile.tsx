@@ -158,7 +158,7 @@ const Profile = () => {
                       </p>
                     </div>
                   </div>
-                  <Button variant="ghost" className="text-primary hover:text-primary">
+                  <Button variant="ghost" className="text-primary">
                     Pobierz
                   </Button>
                 </div>
