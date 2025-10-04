@@ -2,11 +2,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Lightbulb, MessageCircle, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Layout from '@/components/Layout';
-import { mockOffers } from '@/data/mockOffers';
 import { mockApplications, ApplicationStatus } from '@/data/mockApplications';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { api } from '@/services/api';
+import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
+import { VolunteerOffer } from '@/components/VolunteerCard';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
@@ -19,14 +21,47 @@ const OfferDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [isApplicationOpen, setIsApplicationOpen] = useState(false);
+  const [offer, setOffer] = useState<VolunteerOffer | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
-  const offer = mockOffers.find(o => o.id === id);
+  useEffect(() => {
+    const fetchEvent = async () => {
+      if (!id) return;
+      
+      try {
+        setIsLoading(true);
+        const event = await api.getEventById(id);
+        if (event) {
+          setOffer(mapEventToVolunteerOffer(event));
+        } else {
+          setError('Nie znaleziono oferty');
+        }
+      } catch (err) {
+        setError('Błąd podczas ładowania oferty');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchEvent();
+  }, [id]);
+  
   const application = mockApplications.find(app => app.offerId === id);
 
-  if (!offer) {
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Nie znaleziono oferty</p>
+        <p className="text-muted-foreground">Ładowanie...</p>
+      </div>
+    );
+  }
+
+  if (error || !offer) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">{error || 'Nie znaleziono oferty'}</p>
       </div>
     );
   }
