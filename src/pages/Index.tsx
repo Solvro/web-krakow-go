@@ -19,9 +19,9 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
-      <header className="bg-card border-b border-border px-6 py-4">
+      <header className="bg-card border-b border-border px-6 py-4 sticky top-0 z-20">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <h1 className="text-2xl font-bold text-foreground">Młody Kraków</h1>
           <Button variant="ghost" size="icon">
@@ -31,9 +31,9 @@ const Index = () => {
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto">
-        <Tabs defaultValue="lista" className="w-full">
-          <div className="bg-card border-b border-border">
+      <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
+        <Tabs defaultValue="lista" className="w-full flex-1 flex flex-col">
+          <div className="bg-card border-b border-border sticky top-[73px] z-10">
             <TabsList className="bg-transparent border-0 h-auto p-0 w-full grid grid-cols-2">
               <TabsTrigger
                 value="lista"
@@ -50,8 +50,37 @@ const Index = () => {
             </TabsList>
           </div>
 
-          <TabsContent value="mapa" className="m-0">
-            <div className="relative h-[400px]">
+          <TabsContent value="lista" className="m-0 flex-1 flex flex-col">
+            <div className="px-6 py-4 border-b border-border bg-card sticky top-[130px] z-10">
+              <div className="max-w-2xl">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <Input
+                    type="text"
+                    placeholder="Szukaj ofert"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4 overflow-y-auto flex-1">
+              {filteredOffers.length > 0 ? (
+                filteredOffers.map((offer) => (
+                  <VolunteerCard key={offer.id} offer={offer} />
+                ))
+              ) : (
+                <p className="text-center text-muted-foreground py-8">
+                  Nie znaleziono ofert pasujących do wyszukiwania
+                </p>
+              )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="mapa" className="m-0 flex-1 flex flex-col">
+            <div className="relative flex-1">
               {/* Search Bar */}
               <div className="absolute top-4 left-6 right-6 z-10">
                 <div className="bg-card rounded-full shadow-lg flex items-center px-4 py-3 max-w-2xl">
@@ -67,7 +96,9 @@ const Index = () => {
               </div>
 
               {/* Map */}
-              <Map />
+              <div className="h-full">
+                <Map />
+              </div>
             </div>
 
             {/* Offers Section */}
@@ -101,35 +132,6 @@ const Index = () => {
                 </Button>
               </div>
             )}
-          </TabsContent>
-
-          <TabsContent value="lista" className="m-0">
-            <div className="px-6 py-4 border-b border-border bg-card">
-              <div className="max-w-2xl">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                  <Input
-                    type="text"
-                    placeholder="Szukaj ofert"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="p-6 space-y-4">
-              {filteredOffers.length > 0 ? (
-                filteredOffers.map((offer) => (
-                  <VolunteerCard key={offer.id} offer={offer} />
-                ))
-              ) : (
-                <p className="text-center text-muted-foreground py-8">
-                  Nie znaleziono ofert pasujących do wyszukiwania
-                </p>
-              )}
-            </div>
           </TabsContent>
         </Tabs>
       </div>
