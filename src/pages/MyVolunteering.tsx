@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Badge } from '@/components/ui/badge';
 import { Calendar } from 'lucide-react';
-import { mockApplications, ApplicationStatus } from '@/data/mockApplications';
+import { api } from '@/services/api';
 import { 
   EventCard, 
   EventHeader, 
@@ -13,33 +14,86 @@ import {
   EventBadge, 
   EventStatusCompleted 
 } from '@/components/EventCard';
+import { format } from 'date-fns';
+import { pl } from 'date-fns/locale';
+
+type SubmissionStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'COMPLETED';
+
+interface Application {
+  id: string;
+  eventId: string;
+  title: string;
+  organizer: string;
+  date: string;
+  status: SubmissionStatus;
+}
 
 const MyVolunteering = () => {
   const navigate = useNavigate();
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        setIsLoading(true);
+        const submissions = await api.getVolunteerSubmissions('vol-ania');
+        
+        const mappedApplications: Application[] = submissions.map((sub: any) => {
+          const event = sub.Event;
+          const startDate = new Date(event.startDate);
+          const endDate = new Date(event.endDate);
+          
+          const dateStr = startDate.toDateString() === endDate.toDateString()
+            ? format(startDate, 'd MMMM yyyy', { locale: pl })
+            : `${format(startDate, 'd MMMM yyyy', { locale: pl })} - ${format(endDate, 'd MMMM yyyy', { locale: pl })}`;
+
+          return {
+            id: sub.id,
+            eventId: event.id,
+            title: event.title,
+            organizer: event.Organization?.name || 'Nieznana organizacja',
+            date: dateStr,
+            status: sub.status,
+          };
+        });
+
+        setApplications(mappedApplications);
+      } catch (err) {
+        setError('Nie udało się załadować zgłoszeń');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSubmissions();
+  }, []);
   
-  const currentApplications = mockApplications.filter(
-    app => app.status === 'accepted' || app.status === 'pending'
+  const currentApplications = applications.filter(
+    app => app.status === 'ACCEPTED' || app.status === 'PENDING'
   );
   
-  const completedApplications = mockApplications.filter(
-    app => app.status === 'completed'
+  const completedApplications = applications.filter(
+    app => app.status === 'COMPLETED'
   );
 
-  const getStatusBadge = (status: ApplicationStatus) => {
+  const getStatusBadge = (status: SubmissionStatus) => {
     switch (status) {
-      case 'accepted':
+      case 'ACCEPTED':
         return (
           <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-0 font-semibold px-4 py-1">
             Zaakceptowane
           </Badge>
         );
-      case 'pending':
+      case 'PENDING':
         return (
           <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100 border-0 font-semibold px-4 py-1">
             Oczekuje na akceptację
           </Badge>
         );
-      case 'rejected':
+      case 'REJECTED':
         return (
           <Badge className="bg-red-100 text-red-700 hover:bg-red-100 border-0 font-semibold px-4 py-1">
             Odrzucone
@@ -49,6 +103,26 @@ const MyVolunteering = () => {
         return null;
     }
   };
+
+  if (isLoading) {
+    return (
+      <Layout title="Mój Wolontariat">
+        <div className="max-w-3xl mx-auto px-6 py-6">
+          <p className="text-center text-muted-foreground">Ładowanie...</p>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error) {
+    return (
+      <Layout title="Mój Wolontariat">
+        <div className="max-w-3xl mx-auto px-6 py-6">
+          <p className="text-center text-destructive">{error}</p>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title="Mój Wolontariat">
@@ -64,7 +138,7 @@ const MyVolunteering = () => {
               currentApplications.map((app) => (
                 <EventCard 
                   key={app.id}
-                  onClick={() => navigate(`/oferta/${app.offerId}`)}
+                  onClick={() => navigate(`/oferta/${app.eventId}`)}
                 >
                   <EventHeader>
                     <EventContent>
@@ -96,7 +170,7 @@ const MyVolunteering = () => {
               completedApplications.map((app) => (
                 <EventCard 
                   key={app.id}
-                  onClick={() => navigate(`/oferta/${app.offerId}`)}
+                  onClick={() => navigate(`/oferta/${app.eventId}`)}
                 >
                   <EventHeader>
                     <EventContent>

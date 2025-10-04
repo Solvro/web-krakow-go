@@ -78,4 +78,33 @@ export const api = {
       certificates: certificates || [],
     };
   },
+
+  async getVolunteerSubmissions(volunteerId: string) {
+    const { data, error } = await supabase
+      .from('Submission')
+      .select(`
+        id,
+        status,
+        createdAt,
+        eventId,
+        Event (
+          id,
+          title,
+          startDate,
+          endDate,
+          organizationId,
+          Organization (
+            name
+          )
+        )
+      `)
+      .eq('volunteerId', volunteerId)
+      .order('createdAt', { ascending: false });
+    
+    if (error) {
+      throw new Error('Failed to fetch submissions');
+    }
+
+    return data || [];
+  },
 };
