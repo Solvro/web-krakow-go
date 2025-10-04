@@ -176,10 +176,10 @@ const Chats = () => {
   };
 
   const getChatTitle = (chat: ChatWithDetails) => {
-    if (chat.type === 'EVENT') {
-      return chat.eventName || 'Czat wydarzenia';
+    if (chat.type === 'PRIVATE') {
+      return chat.participantName || 'Rozmowa';
     }
-    return chat.participantName || 'Rozmowa';
+    return chat.eventName || 'Czat wydarzenia';
   };
 
   const getChatSubtitle = (chat: ChatWithDetails) => {
