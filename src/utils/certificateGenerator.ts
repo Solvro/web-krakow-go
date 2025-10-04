@@ -25,27 +25,27 @@ export const generateCertificate = async (data: CertificateData) => {
   const pageHeight = pdf.internal.pageSize.getHeight();
 
   // Background color
-  pdf.setFillColor(254, 243, 229); // bg-orange-50 equivalent
+  pdf.setFillColor(248, 248, 248); // bg-orange-50 equivalent
   pdf.rect(0, 0, pageWidth, pageHeight, 'F');
 
   // Border
-  pdf.setDrawColor(251, 146, 60); // orange-400
+  pdf.setDrawColor(69, 120, 167); // orange-400
   pdf.setLineWidth(2);
   pdf.rect(10, 10, pageWidth - 20, pageHeight - 20);
 
   // Inner border
-  pdf.setDrawColor(253, 186, 116); // orange-300
+  pdf.setDrawColor(69, 120, 167); // orange-300
   pdf.setLineWidth(0.5);
   pdf.rect(15, 15, pageWidth - 30, pageHeight - 30);
 
   // Title
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(32);
-  pdf.setTextColor(234, 88, 12); // orange-600
+  pdf.setTextColor(69, 120, 167); // orange-600
   pdf.text('CERTYFIKAT WOLONTARIUSZA', pageWidth / 2, 40, { align: 'center' });
 
   // Decorative line
-  pdf.setDrawColor(251, 146, 60);
+  pdf.setDrawColor(69, 120, 167);
   pdf.setLineWidth(0.5);
   pdf.line(pageWidth / 2 - 60, 45, pageWidth / 2 + 60, 45);
 
