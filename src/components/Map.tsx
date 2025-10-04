@@ -10,7 +10,7 @@ interface MapProps {
 const Map = ({ onMarkerClick }: MapProps) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
-  const [mapboxToken, setMapboxToken] = useState('');
+  const mapboxToken = 'pk.eyJ1IjoicmVpLW9rZWoiLCJhIjoiY21nY2Q0bXJqMTU5eDJpc2FodWszbzFzMiJ9.-14h-1T7nra54h4EL5z9hg';
 
   useEffect(() => {
     if (!mapContainer.current || !mapboxToken) return;
@@ -48,35 +48,6 @@ const Map = ({ onMarkerClick }: MapProps) => {
     };
   }, [mapboxToken, onMarkerClick]);
 
-  if (!mapboxToken) {
-    return (
-      <div className="h-full flex items-center justify-center p-6 bg-muted/30">
-        <div className="text-center max-w-md">
-          <p className="text-sm text-muted-foreground mb-4">
-            Wprowadź swój publiczny token Mapbox aby wyświetlić mapę
-          </p>
-          <Input
-            type="text"
-            placeholder="pk.eyJ1..."
-            value={mapboxToken}
-            onChange={(e) => setMapboxToken(e.target.value)}
-            className="bg-card"
-          />
-          <p className="text-xs text-muted-foreground mt-2">
-            Znajdź token na{' '}
-            <a
-              href="https://mapbox.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-primary hover:underline"
-            >
-              mapbox.com
-            </a>
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return <div ref={mapContainer} className="h-full w-full" />;
 };
