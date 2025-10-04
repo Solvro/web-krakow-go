@@ -5,6 +5,7 @@ import Layout from '@/components/Layout';
 import { mockOffers } from '@/data/mockOffers';
 import { mockApplications, ApplicationStatus } from '@/data/mockApplications';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
@@ -30,7 +31,135 @@ const OfferDetails = () => {
     );
   }
 
-  const pageTitle = application ? 'Potwierdzenie zgłoszenia' : 'Szczegóły oferty';
+  const pageTitle = application 
+    ? (application.status === 'accepted' ? 'Centrum Projektu' : 'Potwierdzenie zgłoszenia')
+    : 'Szczegóły oferty';
+
+  // Render accepted state with schedule
+  if (application?.status === 'accepted') {
+    return (
+      <Layout title={pageTitle} showBackButton>
+        <div className="flex-1 overflow-y-auto pb-20">
+          <div className="max-w-3xl mx-auto px-6 py-8 space-y-6">
+            {/* Event Header */}
+            <div className="bg-card rounded-xl p-6">
+              <h2 className="text-3xl font-bold text-foreground mb-2">
+                {offer.title}
+              </h2>
+              <p className="text-muted-foreground">
+                Organizacja "{offer.organizer}"
+              </p>
+            </div>
+
+            {/* Tabs */}
+            <Tabs defaultValue="harmonogram" className="w-full">
+              <TabsList className="w-full grid grid-cols-3">
+                <TabsTrigger value="harmonogram">Harmonogram</TabsTrigger>
+                <TabsTrigger value="szczegoly">Szczegóły</TabsTrigger>
+                <TabsTrigger value="czaty">Czaty</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="harmonogram" className="mt-6 space-y-6">
+                {/* Schedule Header */}
+                <h3 className="text-xl font-bold text-foreground">
+                  Plan działania - 15 czerwca 2024
+                </h3>
+
+                {/* Timeline */}
+                <div className="space-y-6 relative">
+                  {/* Timeline Line */}
+                  <div className="absolute left-[19px] top-6 bottom-6 w-[2px] bg-border" />
+
+                  {/* Schedule Items */}
+                  <div className="flex gap-4 relative">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10">
+                      <span className="text-white font-semibold">1</span>
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        10:00 - Zbiórka i odprawa
+                      </h4>
+                      <p className="text-muted-foreground">
+                        Spotkanie przy pomniku A. Mickiewicza. Odbiór identyfikatorów, koszulek i przydział zadań.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 relative">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10">
+                      <span className="text-white font-semibold">2</span>
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        11:00 - Pomoc w strefie warsztatowej
+                      </h4>
+                      <p className="text-muted-foreground">
+                        Asystowanie przy warsztatach artystycznych dla dzieci. Zapewnienie materiałów i dbanie o porządek.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 relative">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-primary flex items-center justify-center z-10">
+                      <span className="text-white font-semibold">3</span>
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        14:00 - Przerwa obiadowa
+                      </h4>
+                      <p className="text-muted-foreground">
+                        Godzinna przerwa na posiłek w wyznaczonej strefie dla wolontariuszy.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 relative">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center z-10">
+                      <span className="text-foreground font-semibold">4</span>
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        15:00 - Obsługa punktu informacyjnego
+                      </h4>
+                      <p className="text-muted-foreground">
+                        Udzielanie informacji uczestników festiwalu, kierowanie do odpowiednich stref.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4 relative">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-muted flex items-center justify-center z-10">
+                      <span className="text-foreground font-semibold">5</span>
+                    </div>
+                    <div className="flex-1 pt-1">
+                      <h4 className="text-lg font-bold text-foreground mb-2">
+                        18:00 - Zakończenie i podsumowanie dnia
+                      </h4>
+                      <p className="text-muted-foreground">
+                        Krótkie spotkanie podsumowujące, zdanie sprzętu i pożegnanie.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="szczegoly" className="mt-6">
+                <div className="bg-card rounded-xl p-6 text-center text-muted-foreground">
+                  Zawartość w przygotowaniu
+                </div>
+              </TabsContent>
+
+              <TabsContent value="czaty" className="mt-6">
+                <div className="bg-card rounded-xl p-6 text-center text-muted-foreground">
+                  Zawartość w przygotowaniu
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout title={pageTitle} showBackButton>
