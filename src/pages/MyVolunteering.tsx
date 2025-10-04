@@ -1,9 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, CheckCircle } from 'lucide-react';
+import { Calendar } from 'lucide-react';
 import { mockApplications, ApplicationStatus } from '@/data/mockApplications';
+import { 
+  EventCard, 
+  EventHeader, 
+  EventContent, 
+  EventTitle, 
+  EventOrganizer, 
+  EventInfo, 
+  EventBadge, 
+  EventStatusCompleted 
+} from '@/components/EventCard';
 
 const MyVolunteering = () => {
   const navigate = useNavigate();
@@ -53,30 +62,20 @@ const MyVolunteering = () => {
           <div className="space-y-4">
             {currentApplications.length > 0 ? (
               currentApplications.map((app) => (
-                <Card 
-                  key={app.id} 
-                  className="p-5 bg-card border-border hover:shadow-md transition-shadow cursor-pointer"
+                <EventCard 
+                  key={app.id}
                   onClick={() => navigate(`/oferta/${app.offerId}`)}
                 >
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-foreground mb-1">
-                          {app.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm">
-                          {app.organizer}
-                        </p>
-                      </div>
-                      {getStatusBadge(app.status)}
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
-                      <span className="text-sm">{app.date}</span>
-                    </div>
-                  </div>
-                </Card>
+                  <EventHeader>
+                    <EventContent>
+                      <EventTitle title={app.title} />
+                      <EventOrganizer organizer={app.organizer} />
+                    </EventContent>
+                    {getStatusBadge(app.status)}
+                  </EventHeader>
+                  
+                  <EventInfo icon={Calendar} text={app.date} />
+                </EventCard>
               ))
             ) : (
               <p className="text-center text-muted-foreground py-8">
@@ -95,30 +94,20 @@ const MyVolunteering = () => {
           <div className="space-y-4">
             {completedApplications.length > 0 ? (
               completedApplications.map((app) => (
-                <Card 
-                  key={app.id} 
-                  className="p-5 bg-card border-border hover:shadow-md transition-shadow cursor-pointer"
+                <EventCard 
+                  key={app.id}
                   onClick={() => navigate(`/oferta/${app.offerId}`)}
                 >
-                  <div className="flex flex-col gap-3">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-foreground mb-1">
-                          {app.title}
-                        </h3>
-                        <p className="text-muted-foreground text-sm">
-                          {app.organizer}
-                        </p>
-                      </div>
-                      <CheckCircle className="w-6 h-6 text-emerald-500 shrink-0" />
-                    </div>
-                    
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <Calendar className="w-4 h-4" />
-                      <span className="text-sm">{app.date}</span>
-                    </div>
-                  </div>
-                </Card>
+                  <EventHeader>
+                    <EventContent>
+                      <EventTitle title={app.title} />
+                      <EventOrganizer organizer={app.organizer} />
+                    </EventContent>
+                    <EventStatusCompleted />
+                  </EventHeader>
+                  
+                  <EventInfo icon={Calendar} text={app.date} />
+                </EventCard>
               ))
             ) : (
               <p className="text-center text-muted-foreground py-8">
