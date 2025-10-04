@@ -16,7 +16,7 @@ export const mockApplications: VolunteerApplication[] = [
     title: 'Pomoc w organizacji festynu',
     organizer: 'Fundacja Dzieciom',
     date: '15 czerwca 2024 - 16 czerwca 2024',
-    status: 'approved',
+    status: 'accepted',
   },
   {
     id: 'app-2',
