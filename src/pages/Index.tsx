@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { Bell, Search, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import VolunteerCard from '@/components/VolunteerCard';
 import Map from '@/components/Map';
-import BottomNavigation from '@/components/BottomNavigation';
+import Layout from '@/components/Layout';
 import { mockOffers } from '@/data/mockOffers';
 
 const Index = () => {
@@ -20,17 +20,7 @@ const Index = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background flex flex-col pb-24">
-      {/* Header */}
-      <header className="bg-card border-b border-border px-6 py-4 sticky top-0 z-20">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-foreground">Młody Kraków</h1>
-          <Button variant="ghost" size="icon">
-            <Bell className="w-5 h-5" />
-          </Button>
-        </div>
-      </header>
-
+    <Layout title="Młody Kraków" showNotifications>
       {/* Main Content */}
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
         <Tabs defaultValue="lista" className="w-full flex-1 flex flex-col">
@@ -134,9 +124,7 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </div>
-
-      <BottomNavigation />
-    </div>
+    </Layout>
   );
 };
 

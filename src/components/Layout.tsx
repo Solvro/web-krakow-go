@@ -36,7 +36,7 @@ const Layout = ({
             </Button>
           )}
           
-          <h1 className="text-lg font-semibold text-foreground flex-1">
+          <h1 className={`font-semibold text-foreground flex-1 ${!showBackButton ? 'text-2xl font-bold' : 'text-lg'}`}>
             {title}
           </h1>
           
