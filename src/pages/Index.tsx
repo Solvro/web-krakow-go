@@ -215,7 +215,7 @@ const Index = () => {
               </div>
 
               {/* Map */}
-              <Map latitude={50.0647} longitude={19.9450} placeName="Kraków" />
+              <Map showAllEvents={true} />
             </div>
 
             {/* Offers Section */}
