@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { MapPin, Clock } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -10,6 +11,8 @@ export interface VolunteerOffer {
   time: string;
   dateLabel: string;
   dateType: 'today' | 'tomorrow' | 'future';
+  date?: string;
+  organizer?: string;
 }
 
 interface VolunteerCardProps {
@@ -17,6 +20,8 @@ interface VolunteerCardProps {
 }
 
 const VolunteerCard = ({ offer }: VolunteerCardProps) => {
+  const navigate = useNavigate();
+  
   const getBadgeVariant = (type: string) => {
     switch (type) {
       case 'today':
@@ -29,7 +34,10 @@ const VolunteerCard = ({ offer }: VolunteerCardProps) => {
   };
 
   return (
-    <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer border-border">
+    <Card 
+      className="p-4 hover:shadow-md transition-shadow cursor-pointer border-border"
+      onClick={() => navigate(`/oferta/${offer.id}`)}
+    >
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-semibold text-lg text-foreground">{offer.title}</h3>
         <Badge variant={getBadgeVariant(offer.dateType)} className="ml-2">

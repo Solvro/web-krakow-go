@@ -9,6 +9,8 @@ export const mockOffers: VolunteerOffer[] = [
     time: '10:00 - 14:00',
     dateLabel: 'Dziś',
     dateType: 'today',
+    date: 'Dzisiaj, 4.10.2025 | 10:00 - 14:00',
+    organizer: 'Schronisko dla Zwierząt',
   },
   {
     id: '2',
@@ -18,6 +20,8 @@ export const mockOffers: VolunteerOffer[] = [
     time: '09:00 - 12:00',
     dateLabel: 'Jutro',
     dateType: 'tomorrow',
+    date: 'Jutro, 5.10.2025 | 09:00 - 12:00',
+    organizer: 'Fundacja Zielony Kraków',
   },
   {
     id: '3',
@@ -27,6 +31,8 @@ export const mockOffers: VolunteerOffer[] = [
     time: '15:00 - 18:00',
     dateLabel: 'Wtorek',
     dateType: 'future',
+    date: 'Wtorek, 8.10.2025 | 15:00 - 18:00',
+    organizer: 'Dom Seniora Kraków',
   },
   {
     id: '4',
@@ -36,6 +42,8 @@ export const mockOffers: VolunteerOffer[] = [
     time: '14:00 - 16:00',
     dateLabel: 'Środa',
     dateType: 'future',
+    date: 'Środa, 9.10.2025 | 14:00 - 16:00',
+    organizer: 'Centrum Kultury Kraków',
   },
   {
     id: '5',
@@ -45,6 +53,8 @@ export const mockOffers: VolunteerOffer[] = [
     time: '12:00 - 15:00',
     dateLabel: 'Czwartek',
     dateType: 'future',
+    date: 'Czwartek, 10.10.2025 | 12:00 - 15:00',
+    organizer: 'Jadłodajnia Caritas',
   },
   {
     id: '6',
@@ -54,5 +64,7 @@ export const mockOffers: VolunteerOffer[] = [
     time: '10:00 - 13:00',
     dateLabel: 'Piątek',
     dateType: 'future',
+    date: 'Piątek, 11.10.2025 | 10:00 - 13:00',
+    organizer: 'Fundacja Pomoc Potrzebującym',
   },
 ];
