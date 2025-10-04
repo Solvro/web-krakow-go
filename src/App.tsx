@@ -36,7 +36,7 @@ const App = () => (
                 <MyVolunteering />
               </AuthGuard>
             } />
-            <Route path="/profil" element={
+            <Route path="/profil/:volunteerId" element={
               <AuthGuard>
                 <Profile />
               </AuthGuard>

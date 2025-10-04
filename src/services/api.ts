@@ -48,4 +48,34 @@ export const api = {
     
     return data;
   },
+
+  async getVolunteerById(id: string) {
+    const { data: volunteer, error: volunteerError } = await supabase
+      .from('Volunteer')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+    
+    if (volunteerError) {
+      throw new Error('Failed to fetch volunteer');
+    }
+
+    if (!volunteer) {
+      return null;
+    }
+
+    const { data: certificates, error: certificatesError } = await supabase
+      .from('AttendanceCertificate')
+      .select('*')
+      .eq('volunteerId', id);
+    
+    if (certificatesError) {
+      throw new Error('Failed to fetch certificates');
+    }
+
+    return {
+      ...volunteer,
+      certificates: certificates || [],
+    };
+  },
 };

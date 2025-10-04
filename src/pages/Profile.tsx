@@ -1,10 +1,12 @@
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Calendar, Pencil } from 'lucide-react';
 import BadgeCard from '@/components/BadgeCard';
-import { mockUserProfile, mockUserVolunteering } from '@/data/mockUserProfile';
 import { mockBadges } from '@/data/mockBadges';
+import { api } from '@/services/api';
 import ekoInicjatywa from '@/assets/badges/eko-inicjatywa.png';
 import straznikCzystosci from '@/assets/badges/straznik-czystosci.png';
 import pomocnaLapa from '@/assets/badges/pomocna-lapa.png';
@@ -14,6 +16,33 @@ import liderZespolu from '@/assets/badges/lider-zespolu.png';
 import mistrzLogistyki from '@/assets/badges/mistrz-logistyki.png';
 
 const Profile = () => {
+  const { volunteerId } = useParams();
+  const [volunteer, setVolunteer] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchVolunteer = async () => {
+      if (!volunteerId) return;
+      
+      try {
+        setIsLoading(true);
+        const data = await api.getVolunteerById(volunteerId);
+        if (data) {
+          setVolunteer(data);
+        } else {
+          setError('Nie znaleziono wolontariusza');
+        }
+      } catch (err) {
+        setError('Błąd podczas ładowania profilu');
+        console.error(err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchVolunteer();
+  }, [volunteerId]);
   const badgeImages: { [key: string]: string } = {
     'eko-inicjatywa': ekoInicjatywa,
     'straznik-czystosci': straznikCzystosci,
@@ -32,6 +61,25 @@ const Profile = () => {
     return acc;
   }, {} as { [key: string]: typeof mockBadges });
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">Ładowanie...</p>
+      </div>
+    );
+  }
+
+  if (error || !volunteer) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground">{error || 'Nie znaleziono wolontariusza'}</p>
+      </div>
+    );
+  }
+
+  const age = Math.floor((new Date().getTime() - new Date(volunteer.birthdate).getTime()) / (365.25 * 24 * 60 * 60 * 1000));
+  const totalHours = volunteer.certificates.reduce((sum: number, cert: any) => sum + (cert.tasksCount * 2), 0);
+
   return (
     <Layout title="Profil">
       <div className="max-w-3xl mx-auto px-6 py-6 space-y-8 pb-24">
@@ -39,9 +87,8 @@ const Profile = () => {
         <div className="flex flex-col items-center gap-4">
           <div className="relative">
             <Avatar className="w-32 h-32">
-              <AvatarImage src={mockUserProfile.avatar} />
               <AvatarFallback className="bg-orange-200 text-4xl">
-                {mockUserProfile.name.split(' ').map(n => n[0]).join('')}
+                {volunteer.name.split(' ').map((n: string) => n[0]).join('')}
               </AvatarFallback>
             </Avatar>
             <Button
@@ -53,18 +100,16 @@ const Profile = () => {
           </div>
           
           <div className="text-center">
-            <h1 className="text-2xl font-bold">{mockUserProfile.name}</h1>
-            <p className="text-muted-foreground">{mockUserProfile.age} lata</p>
-            <p className="text-muted-foreground">{mockUserProfile.role}</p>
+            <h1 className="text-2xl font-bold">{volunteer.name}</h1>
+            <p className="text-muted-foreground">{age} lata</p>
+            <p className="text-muted-foreground">{volunteer.email}</p>
           </div>
         </div>
 
-        {/* Skills Section */}
+        {/* Points Display */}
         <div>
-          <h2 className="text-lg font-semibold mb-3">Zainteresowania i umiejętności</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            {mockUserProfile.skills}
-          </p>
+          <h2 className="text-lg font-semibold mb-3">Punkty</h2>
+          <p className="text-3xl font-bold text-primary">{volunteer.points}</p>
         </div>
 
         {/* Badges Section */}
@@ -89,32 +134,39 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Volunteering History */}
+        {/* Certificates History */}
         <div>
-          <h2 className="text-lg font-semibold mb-4">Moje Wolontariaty</h2>
-          <div className="space-y-3">
-            {mockUserVolunteering.map((volunteering) => (
-              <div
-                key={volunteering.id}
-                className="bg-card rounded-xl p-4 flex items-center justify-between"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-primary" />
+          <h2 className="text-lg font-semibold mb-4">Certyfikaty</h2>
+          {volunteer.certificates.length > 0 ? (
+            <div className="space-y-3">
+              {volunteer.certificates.map((certificate: any) => (
+                <div
+                  key={certificate.id}
+                  className="bg-card rounded-xl p-4 flex items-center justify-between"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Calendar className="w-6 h-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Certyfikat</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Punkty: {certificate.points} | Zadania: {certificate.tasksCount}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(certificate.issuedAt).toLocaleDateString('pl-PL')}
+                      </p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-medium">{volunteering.title}</h3>
-                    <p className="text-sm text-muted-foreground">{volunteering.hours}</p>
-                  </div>
-                </div>
-                {volunteering.hasCertificate && (
                   <Button variant="ghost" className="text-primary hover:text-primary">
-                    Zaświadczenie
+                    Pobierz
                   </Button>
-                )}
-              </div>
-            ))}
-          </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">Brak certyfikatów</p>
+          )}
         </div>
 
         {/* Summary Stats */}
@@ -122,12 +174,12 @@ const Profile = () => {
           <h2 className="text-lg font-semibold mb-4">Podsumowanie</h2>
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Przepracowane godziny</p>
-              <p className="text-4xl font-bold">{mockUserProfile.totalHours}</p>
+              <p className="text-sm text-muted-foreground mb-2">Szacunkowe godziny</p>
+              <p className="text-4xl font-bold">{totalHours}</p>
             </div>
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Zdobyte odznaki</p>
-              <p className="text-4xl font-bold">{mockUserProfile.totalBadges}</p>
+              <p className="text-sm text-muted-foreground mb-2">Certyfikaty</p>
+              <p className="text-4xl font-bold">{volunteer.certificates.length}</p>
             </div>
           </div>
         </div>
