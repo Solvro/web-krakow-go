@@ -9,6 +9,7 @@ import { mockBadges } from '@/data/mockBadges';
 import { api } from '@/services/api';
 import { generateCertificate } from '@/utils/certificateGenerator';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import ekoInicjatywa from '@/assets/badges/eko-inicjatywa.png';
 import straznikCzystosci from '@/assets/badges/straznik-czystosci.png';
 import pomocnaLapa from '@/assets/badges/pomocna-lapa.png';
@@ -92,9 +93,12 @@ const Profile = () => {
         return;
       }
 
-      // Fetch organization name
-      const response = await api.getEvents();
-      const eventWithOrg = response.find(e => e.id === certificate.eventId);
+      // Fetch organization details
+      const { data: organization } = await supabase
+        .from('Organization')
+        .select('name')
+        .eq('id', event.organizationId)
+        .maybeSingle();
       
       await generateCertificate({
         volunteerId: volunteer.id,
@@ -102,7 +106,7 @@ const Profile = () => {
         volunteerEmail: volunteer.email,
         eventId: certificate.eventId,
         eventTitle: event.title,
-        organizationName: eventWithOrg?.organizationId || 'Organizacja',
+        organizationName: organization?.name || 'Organizacja',
         points: certificate.points,
         tasksCount: certificate.tasksCount,
         issuedAt: certificate.issuedAt,
