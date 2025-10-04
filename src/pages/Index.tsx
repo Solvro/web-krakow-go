@@ -79,7 +79,7 @@ const Index = () => {
   });
 
   return (
-    <Layout title="Młody Kraków" showNotifications>
+    <Layout showNotifications>
       {/* Main Content */}
       <div className="max-w-7xl mx-auto w-full flex-1 flex flex-col">
         <Tabs defaultValue="lista" className="w-full flex-1 flex flex-col">

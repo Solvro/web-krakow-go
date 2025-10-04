@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import logo from '@/assets/mlody-krakow-logo.png';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -58,7 +59,7 @@ const Login = () => {
           >
             <ArrowLeft className="w-5 h-5" />
           </Button>
-          <h1 className="text-lg font-semibold text-foreground">Młody Kraków</h1>
+          <img src={logo} alt="Młody Kraków" className="h-8 object-contain" />
         </div>
       </header>
 
