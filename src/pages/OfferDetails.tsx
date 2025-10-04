@@ -10,6 +10,7 @@ import { api } from '@/services/api';
 import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
 import { VolunteerOffer } from '@/components/VolunteerCard';
 import { supabase } from '@/integrations/supabase/client';
+import { toast } from '@/hooks/use-toast';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
@@ -26,6 +27,70 @@ const OfferDetails = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [organizationName, setOrganizationName] = useState<string>('Organizator');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const handleRegistration = async () => {
+    if (!id) return;
+    
+    setIsSubmitting(true);
+    try {
+      // Hard-coded volunteer ID for Anna
+      const volunteerId = 'vol-ania';
+      
+      // Check if submission already exists
+      const { data: existingSubmission } = await supabase
+        .from('Submission')
+        .select('*')
+        .eq('eventId', id)
+        .eq('volunteerId', volunteerId)
+        .maybeSingle();
+      
+      if (existingSubmission) {
+        // Update existing submission to PENDING if it was rejected or something
+        await supabase
+          .from('Submission')
+          .update({ 
+            status: 'PENDING',
+            updatedAt: new Date().toISOString()
+          })
+          .eq('id', existingSubmission.id);
+        
+        toast({
+          title: "Zgłoszenie zaktualizowane!",
+          description: "Twoje zgłoszenie zostało ponownie wysłane.",
+        });
+      } else {
+        // Create new submission
+        await supabase
+          .from('Submission')
+          .insert({
+            id: `sub-${Date.now()}`,
+            eventId: id,
+            volunteerId: volunteerId,
+            status: 'PENDING',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          });
+        
+        toast({
+          title: "Zgłoszenie wysłane!",
+          description: "Twoje zgłoszenie zostało pomyślnie przesłane do organizatora.",
+        });
+      }
+      
+      // Redirect to My Volunteering page
+      setTimeout(() => navigate('/moj-wolontariat'), 1000);
+    } catch (err) {
+      console.error('Error creating submission:', err);
+      toast({
+        title: "Błąd",
+        description: "Nie udało się wysłać zgłoszenia. Spróbuj ponownie.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   
   useEffect(() => {
     const fetchEvent = async () => {
@@ -432,9 +497,10 @@ const OfferDetails = () => {
             <Button 
               className="w-full h-14 text-lg font-semibold rounded-xl"
               size="lg"
-              onClick={() => navigate(`/oferta/${id}/zglos`)}
+              onClick={handleRegistration}
+              disabled={isSubmitting}
             >
-              Zgłoś się
+              {isSubmitting ? 'Wysyłanie...' : 'Zgłoś się'}
             </Button>
           </div>
         </div>
