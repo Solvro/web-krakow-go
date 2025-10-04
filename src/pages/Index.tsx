@@ -79,8 +79,8 @@ const Index = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="mapa" className="m-0 flex-1 flex flex-col">
-            <div className="relative flex-1">
+          <TabsContent value="mapa" className="m-0 flex-1">
+            <div className="relative h-[calc(100vh-130px)]">
               {/* Search Bar */}
               <div className="absolute top-4 left-6 right-6 z-10">
                 <div className="bg-card rounded-full shadow-lg flex items-center px-4 py-3 max-w-2xl">
@@ -96,9 +96,7 @@ const Index = () => {
               </div>
 
               {/* Map */}
-              <div className="h-full">
-                <Map />
-              </div>
+              <Map />
             </div>
 
             {/* Offers Section */}
