@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import { Search, X } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import VolunteerCard from '@/components/VolunteerCard';
 import Map from '@/components/Map';
 import Layout from '@/components/Layout';
-import { mockOffers } from '@/data/mockOffers';
+import { api } from '@/services/api';
+import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOffers, setShowOffers] = useState(true);
 
-  const filteredOffers = mockOffers.filter(
+  const { data: events, isLoading, error } = useQuery({
+    queryKey: ['events'],
+    queryFn: api.getEvents,
+  });
+
+  const offers = events ? events.map(mapEventToVolunteerOffer) : [];
+
+  const filteredOffers = offers.filter(
     (offer) =>
       offer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       offer.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -58,7 +68,17 @@ const Index = () => {
             </div>
 
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
-              {filteredOffers.length > 0 ? (
+              {isLoading ? (
+                <>
+                  <Skeleton className="h-32 w-full" />
+                  <Skeleton className="h-32 w-full" />
+                  <Skeleton className="h-32 w-full" />
+                </>
+              ) : error ? (
+                <p className="text-center text-destructive py-8">
+                  Błąd podczas ładowania ofert
+                </p>
+              ) : filteredOffers.length > 0 ? (
                 filteredOffers.map((offer) => (
                   <VolunteerCard key={offer.id} offer={offer} />
                 ))
@@ -101,7 +121,16 @@ const Index = () => {
                 </div>
 
                 <div className="p-6 space-y-4 max-h-[500px] overflow-y-auto">
-                  {filteredOffers.length > 0 ? (
+                  {isLoading ? (
+                    <>
+                      <Skeleton className="h-32 w-full" />
+                      <Skeleton className="h-32 w-full" />
+                    </>
+                  ) : error ? (
+                    <p className="text-center text-destructive py-8">
+                      Błąd podczas ładowania ofert
+                    </p>
+                  ) : filteredOffers.length > 0 ? (
                     filteredOffers.map((offer) => (
                       <VolunteerCard key={offer.id} offer={offer} />
                     ))
