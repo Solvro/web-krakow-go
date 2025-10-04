@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://solvro.loca.lt/api';
+const API_BASE_URL = 'https://solvro.loca.lt';
 
 export interface ApiEvent {
   id: string;
