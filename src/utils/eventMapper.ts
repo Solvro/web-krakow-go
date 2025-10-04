@@ -32,8 +32,7 @@ export const mapEventToVolunteerOffer = (event: ApiEvent): VolunteerOffer => {
     ? event.description 
     : event.description?.description || 'Brak opisu';
   
-  // Create location from coordinates (placeholder for now)
-  const location = `${event.latitude.toFixed(4)}, ${event.longitude.toFixed(4)}`;
+  const location = event.placeName;
   
   return {
     id: event.id,

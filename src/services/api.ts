@@ -9,6 +9,7 @@ export interface ApiEvent {
   endDate: string;
   longitude: number;
   latitude: number;
+  placeName: string;
   organizationId: string;
   createdAt: string;
   updatedAt: string;
