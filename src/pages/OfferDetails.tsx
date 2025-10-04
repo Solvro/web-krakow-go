@@ -59,11 +59,12 @@ const OfferDetails = () => {
                 <TabsTrigger value="czaty">Czaty</TabsTrigger>
               </TabsList>
 
-              <TabsContent value="harmonogram" className="mt-6 space-y-6">
-                {/* Schedule Header */}
-                <h3 className="text-xl font-bold text-foreground">
-                  Plan działania - 15 czerwca 2024
-                </h3>
+              <TabsContent value="harmonogram" className="mt-6">
+                <div className="bg-card rounded-xl p-6 space-y-6">
+                  {/* Schedule Header */}
+                  <h3 className="text-xl font-bold text-foreground">
+                    Plan działania - 15 czerwca 2024
+                  </h3>
 
                 {/* Timeline */}
                 <div className="space-y-6 relative">
@@ -141,6 +142,7 @@ const OfferDetails = () => {
                     </div>
                   </div>
                 </div>
+              </div>
               </TabsContent>
 
               <TabsContent value="szczegoly" className="mt-6">
