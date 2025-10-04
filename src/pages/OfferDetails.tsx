@@ -146,8 +146,95 @@ const OfferDetails = () => {
               </TabsContent>
 
               <TabsContent value="szczegoly" className="mt-6">
-                <div className="bg-card rounded-xl p-6 text-center text-muted-foreground">
-                  Zawartość w przygotowaniu
+                <div className="space-y-8">
+                  {/* Informacje o projekcie */}
+                  <div className="bg-card rounded-xl p-6 space-y-6">
+                    <h3 className="text-xl font-bold text-foreground">Informacje o projekcie</h3>
+                    
+                    {/* Opis projektu */}
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-2">Opis projektu</h4>
+                      <p className="text-muted-foreground leading-relaxed">
+                        {offer.description}
+                      </p>
+                    </div>
+
+                    {/* Organizator */}
+                    <div>
+                      <h4 className="font-semibold text-foreground mb-3">Organizator</h4>
+                      <p className="text-foreground mb-3">{offer.organizer}</p>
+                      <div className="space-y-2">
+                        <a href="tel:+48123456789" className="flex items-center gap-2 text-primary hover:underline">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          +48 123 456 789
+                        </a>
+                        <a href="mailto:kontakt@mdk.krakow.pl" className="flex items-center gap-2 text-primary hover:underline">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          kontakt@mdk.krakow.pl
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Szczegóły wydarzenia */}
+                  <div className="bg-card rounded-xl p-6 space-y-6">
+                    <h3 className="text-xl font-bold text-foreground">Szczegóły wydarzenia</h3>
+                    
+                    {/* Data i godzina */}
+                    <div className="flex gap-4">
+                      <div className="shrink-0">
+                        <Calendar className="w-6 h-6 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-1">Data i godzina</h4>
+                        <p className="text-foreground">15 czerwca 2024 (Sobota)</p>
+                        <p className="text-muted-foreground">Start: 10:00</p>
+                        <p className="text-muted-foreground">Zakończenie: 18:00</p>
+                      </div>
+                    </div>
+
+                    {/* Miejsce spotkania */}
+                    <div className="flex gap-4">
+                      <div className="shrink-0">
+                        <MapPin className="w-6 h-6 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-foreground mb-1">Miejsce spotkania</h4>
+                        <p className="text-foreground">Rynek Główny, pomnik Adama Mickiewicza</p>
+                        <p className="text-muted-foreground mb-3">31-042 Kraków</p>
+                        {/* Placeholder dla mapy */}
+                        <div className="w-full h-40 bg-muted rounded-lg flex items-center justify-center">
+                          <MapPin className="w-8 h-8 text-muted-foreground" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Wymagane umiejętności */}
+                  <div className="bg-card rounded-xl p-6 space-y-4">
+                    <h3 className="text-xl font-bold text-foreground">Wymagane umiejętności</h3>
+                    <div className="flex flex-wrap gap-2">
+                      <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        Komunikatywność
+                      </span>
+                      <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        Praca w zespole
+                      </span>
+                      <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        Dobra organizacja
+                      </span>
+                      <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        Pozytywne nastawienie
+                      </span>
+                      <span className="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        Kreatywność
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
 
