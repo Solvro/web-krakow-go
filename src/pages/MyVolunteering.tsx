@@ -72,7 +72,7 @@ const MyVolunteering = () => {
   }, []);
   
   const currentApplications = applications.filter(
-    app => app.status === 'ACCEPTED' || app.status === 'PENDING'
+    app => app.status === 'ACCEPTED' || app.status === 'PENDING' || app.status === 'REJECTED'
   );
   
   const completedApplications = applications.filter(
