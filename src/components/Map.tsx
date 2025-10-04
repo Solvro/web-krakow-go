@@ -95,7 +95,7 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
 
         // Navigate on click
         el.addEventListener('click', () => {
-          navigate(`/oferty/${event.id}`);
+          navigate(`/oferta/${event.id}`);
         });
 
         // Show popup on hover
