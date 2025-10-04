@@ -1,9 +1,9 @@
-const API_BASE_URL = 'https://solvro.loca.lt';
+import { supabase } from '@/integrations/supabase/client';
 
 export interface ApiEvent {
   id: string;
   title: string;
-  topic: 'ANIMALS' | 'ENVIRONMENT' | 'EDUCATION' | 'HEALTH' | 'CULTURE' | 'SPORT' | 'OTHER';
+  topic: 'ANIMALS' | 'CHILDREN' | 'COMMUNITY' | 'EDUCATION' | 'ELDERLY' | 'ENVIRONMENT' | 'HEALTH' | 'OTHER' | 'TECH';
   description: any;
   startDate: string;
   endDate: string;
@@ -17,10 +17,21 @@ export interface ApiEvent {
 
 export const api = {
   async getEvents(): Promise<ApiEvent[]> {
-    const response = await fetch(`${API_BASE_URL}/event`);
-    if (!response.ok) {
+    const { data, error } = await supabase
+      .from('Event')
+      .select('*')
+      .order('startDate', { ascending: true });
+    
+    if (error) {
       throw new Error('Failed to fetch events');
     }
-    return response.json();
+    
+    return (data || []).map(event => ({
+      ...event,
+      startDate: event.startDate,
+      endDate: event.endDate,
+      createdAt: event.createdAt,
+      updatedAt: event.updatedAt,
+    }));
   },
 };
