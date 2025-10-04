@@ -12,6 +12,9 @@ import { VolunteerOffer } from '@/components/VolunteerCard';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import Map from '@/components/Map';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
@@ -31,8 +34,10 @@ const OfferDetails = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentSubmission, setCurrentSubmission] = useState<any>(null);
   const [eventCoordinates, setEventCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [registrationDescription, setRegistrationDescription] = useState('');
   
-  const handleRegistration = async () => {
+  const handleOpenDialog = () => {
     if (!id) return;
     
     // Prevent re-submission for approved or completed events
@@ -45,17 +50,24 @@ const OfferDetails = () => {
       return;
     }
     
+    setIsDialogOpen(true);
+  };
+
+  const handleRegistration = async () => {
+    if (!id) return;
+    
     setIsSubmitting(true);
     try {
       // Hard-coded volunteer ID for Anna
       const volunteerId = 'vol-ania';
       
       if (currentSubmission) {
-        // Update existing submission to PENDING
+        // Update existing submission to PENDING with new description
         await supabase
           .from('Submission')
           .update({ 
             status: 'PENDING',
+            description: registrationDescription || null,
             updatedAt: new Date().toISOString()
           })
           .eq('id', currentSubmission.id);
@@ -65,7 +77,7 @@ const OfferDetails = () => {
           description: "Twoje zgłoszenie zostało ponownie wysłane.",
         });
       } else {
-        // Create new submission
+        // Create new submission with description
         await supabase
           .from('Submission')
           .insert({
@@ -73,6 +85,7 @@ const OfferDetails = () => {
             eventId: id,
             volunteerId: volunteerId,
             status: 'PENDING',
+            description: registrationDescription || null,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
           });
@@ -82,6 +95,9 @@ const OfferDetails = () => {
           description: "Twoje zgłoszenie zostało pomyślnie przesłane do organizatora.",
         });
       }
+      
+      setIsDialogOpen(false);
+      setRegistrationDescription('');
       
       // Redirect to My Volunteering page
       setTimeout(() => navigate('/moj-wolontariat'), 1000);
@@ -534,14 +550,60 @@ const OfferDetails = () => {
             <Button 
               className="w-full h-14 text-lg font-semibold rounded-xl"
               size="lg"
-              onClick={handleRegistration}
+              onClick={handleOpenDialog}
               disabled={isSubmitting}
             >
-              {isSubmitting ? 'Wysyłanie...' : 'Zgłoś się'}
+              Zgłoś się
             </Button>
           </div>
         </div>
       )}
+
+      {/* Registration Dialog */}
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Zgłoszenie do wydarzenia</DialogTitle>
+            <DialogDescription>
+              Powiedz organizatorowi dlaczego chcesz wziąć udział w tym wydarzeniu. To pomoże w ocenie Twojego zgłoszenia.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="description">Twoja wiadomość (opcjonalnie)</Label>
+              <Textarea
+                id="description"
+                placeholder="Np. Jestem zainteresowany/a tym wydarzeniem, ponieważ..."
+                value={registrationDescription}
+                onChange={(e) => setRegistrationDescription(e.target.value)}
+                className="min-h-[120px] resize-none"
+                maxLength={500}
+              />
+              <p className="text-xs text-muted-foreground">
+                {registrationDescription.length}/500 znaków
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsDialogOpen(false);
+                setRegistrationDescription('');
+              }}
+              disabled={isSubmitting}
+            >
+              Anuluj
+            </Button>
+            <Button
+              onClick={handleRegistration}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Wysyłanie...' : 'Wyślij zgłoszenie'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Layout>
   );
 };
