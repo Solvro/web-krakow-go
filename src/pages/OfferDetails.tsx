@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import { api } from '@/services/api';
 import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
 import { VolunteerOffer } from '@/components/VolunteerCard';
+import { supabase } from '@/integrations/supabase/client';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
@@ -24,6 +25,7 @@ const OfferDetails = () => {
   const [offer, setOffer] = useState<VolunteerOffer | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [organizationName, setOrganizationName] = useState<string>('Organizator');
   
   useEffect(() => {
     const fetchEvent = async () => {
@@ -34,6 +36,17 @@ const OfferDetails = () => {
         const event = await api.getEventById(id);
         if (event) {
           setOffer(mapEventToVolunteerOffer(event));
+          
+          // Fetch organization name
+          const { data: organization } = await supabase
+            .from('Organization')
+            .select('name')
+            .eq('id', event.organizationId)
+            .maybeSingle();
+          
+          if (organization) {
+            setOrganizationName(organization.name);
+          }
         } else {
           setError('Nie znaleziono oferty');
         }
@@ -391,11 +404,11 @@ const OfferDetails = () => {
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
                   <span className="text-2xl font-bold text-primary">
-                    {(offer.organizer || 'Organizator').charAt(0)}
+                    {organizationName.charAt(0)}
                   </span>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground">{offer.organizer || 'Organizator'}</h4>
+                  <h4 className="font-semibold text-foreground">{organizationName}</h4>
                   <p className="text-sm text-muted-foreground">Organizator</p>
                 </div>
               </div>
