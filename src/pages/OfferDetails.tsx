@@ -12,7 +12,7 @@ import { VolunteerOffer } from '@/components/VolunteerCard';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
-  accepted: { label: 'Zgłoszenie zaakceptowane', color: 'text-green-600' },
+  approved: { label: 'Zgłoszenie zaakceptowane', color: 'text-green-600' },
   rejected: { label: 'Zgłoszenie odrzucone', color: 'text-red-600' },
   completed: { label: 'Wydarzenie zakończone', color: 'text-gray-600' },
 };
@@ -67,11 +67,11 @@ const OfferDetails = () => {
   }
 
   const pageTitle = application 
-    ? (application.status === 'accepted' ? 'Centrum Projektu' : 'Potwierdzenie zgłoszenia')
+    ? (application.status === 'approved' ? 'Centrum Projektu' : 'Potwierdzenie zgłoszenia')
     : 'Szczegóły oferty';
 
-  // Render accepted state with schedule
-  if (application?.status === 'accepted') {
+  // Render approved state with schedule
+  if (application?.status === 'approved') {
     return (
       <Layout title={pageTitle} showBackButton>
         <div className="flex-1 overflow-y-auto pb-20">

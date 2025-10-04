@@ -85,7 +85,7 @@ const MyVolunteering = () => {
 
   const getStatusBadge = (status: SubmissionStatus) => {
     switch (status) {
-      case 'ACCEPTED':
+      case 'APPROVED':
         return (
           <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-0 font-semibold px-4 py-1">
             Zaakceptowane
