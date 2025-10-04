@@ -154,13 +154,6 @@ export type Database = {
             referencedRelation: "Chat"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "ChatMessage_senderId_fkey"
-            columns: ["senderId"]
-            isOneToOne: false
-            referencedRelation: "ChatParticipant"
-            referencedColumns: ["id"]
-          },
         ]
       }
       ChatParticipant: {
@@ -297,6 +290,58 @@ export type Database = {
           },
         ]
       }
+      EventRecommendation: {
+        Row: {
+          coordinatorId: string
+          createdAt: string
+          eventId: string
+          id: string
+          message: string | null
+          updatedAt: string
+          volunteerId: string
+        }
+        Insert: {
+          coordinatorId: string
+          createdAt?: string
+          eventId: string
+          id: string
+          message?: string | null
+          updatedAt: string
+          volunteerId: string
+        }
+        Update: {
+          coordinatorId?: string
+          createdAt?: string
+          eventId?: string
+          id?: string
+          message?: string | null
+          updatedAt?: string
+          volunteerId?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "EventRecommendation_coordinatorId_fkey"
+            columns: ["coordinatorId"]
+            isOneToOne: false
+            referencedRelation: "Coordinator"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventRecommendation_eventId_fkey"
+            columns: ["eventId"]
+            isOneToOne: false
+            referencedRelation: "Event"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "EventRecommendation_volunteerId_fkey"
+            columns: ["volunteerId"]
+            isOneToOne: false
+            referencedRelation: "Volunteer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Organization: {
         Row: {
           createdAt: string
@@ -345,6 +390,7 @@ export type Database = {
       Submission: {
         Row: {
           createdAt: string
+          description: string | null
           eventId: string
           id: string
           status: Database["public"]["Enums"]["SubmissionStatus"]
@@ -353,6 +399,7 @@ export type Database = {
         }
         Insert: {
           createdAt?: string
+          description?: string | null
           eventId: string
           id: string
           status?: Database["public"]["Enums"]["SubmissionStatus"]
@@ -361,6 +408,7 @@ export type Database = {
         }
         Update: {
           createdAt?: string
+          description?: string | null
           eventId?: string
           id?: string
           status?: Database["public"]["Enums"]["SubmissionStatus"]
@@ -498,7 +546,7 @@ export type Database = {
         | "COMMUNITY"
         | "TECH"
         | "OTHER"
-      SubmissionStatus: "PENDING" | "APPROVED" | "REJECTED"
+      SubmissionStatus: "PENDING" | "APPROVED" | "REJECTED" | "COMPLETED"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -638,7 +686,7 @@ export const Constants = {
         "TECH",
         "OTHER",
       ],
-      SubmissionStatus: ["PENDING", "APPROVED", "REJECTED"],
+      SubmissionStatus: ["PENDING", "APPROVED", "REJECTED", "COMPLETED"],
     },
   },
 } as const
