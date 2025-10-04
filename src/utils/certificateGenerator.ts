@@ -117,15 +117,6 @@ export const generateCertificate = async (data: CertificateData) => {
   
   yPosition += 8;
   pdf.text(`Szacowany czas zaangazowania: ${estimatedHours} godzin`, pageWidth / 2, yPosition, { align: 'center' });
-  
-  // Footer
-  yPosition = pageHeight - 30;
-  pdf.setFontSize(9);
-  pdf.setTextColor(120, 120, 120);
-  pdf.text('Potwierdzenie uczestnictwa w wolontariacie', pageWidth / 2, yPosition, { align: 'center' });
-  
-  yPosition += 5;
-  pdf.text(`ID Certyfikatu: ${data.eventTitle.substring(0, 20).toUpperCase()}`, pageWidth / 2, yPosition, { align: 'center' });
 
   // Save PDF
   const fileName = `Certyfikat_${data.volunteerName.replace(/\s+/g, '_')}_${data.eventTitle.substring(0, 10).replace(/\s+/g, '_')}.pdf`;
