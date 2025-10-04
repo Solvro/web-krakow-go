@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, X } from 'lucide-react';
+import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -10,10 +10,29 @@ import Layout from '@/components/Layout';
 import { api } from '@/services/api';
 import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOffers, setShowOffers] = useState(true);
+  const [topicFilter, setTopicFilter] = useState<string>('all');
+  const [dateFilter, setDateFilter] = useState<string>('all');
+  const [sortBy, setSortBy] = useState<string>('date-asc');
 
   const { data: events, isLoading, error } = useQuery({
     queryKey: ['events'],
@@ -22,12 +41,42 @@ const Index = () => {
 
   const offers = events ? events.map(mapEventToVolunteerOffer) : [];
 
-  const filteredOffers = offers.filter(
+  // Filter offers
+  let filteredOffers = offers.filter(
     (offer) =>
       offer.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       offer.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       offer.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Filter by topic
+  if (topicFilter !== 'all') {
+    filteredOffers = filteredOffers.filter((offer) => {
+      const event = events?.find((e) => e.id === offer.id);
+      return event?.topic === topicFilter;
+    });
+  }
+
+  // Filter by date
+  if (dateFilter !== 'all') {
+    filteredOffers = filteredOffers.filter((offer) => offer.dateType === dateFilter);
+  }
+
+  // Sort offers
+  filteredOffers = [...filteredOffers].sort((a, b) => {
+    switch (sortBy) {
+      case 'date-asc':
+        return new Date(a.date || '').getTime() - new Date(b.date || '').getTime();
+      case 'date-desc':
+        return new Date(b.date || '').getTime() - new Date(a.date || '').getTime();
+      case 'title-asc':
+        return a.title.localeCompare(b.title, 'pl');
+      case 'title-desc':
+        return b.title.localeCompare(a.title, 'pl');
+      default:
+        return 0;
+    }
+  });
 
   return (
     <Layout title="Młody Kraków" showNotifications>
@@ -52,7 +101,7 @@ const Index = () => {
           </div>
 
           <TabsContent value="lista" className="m-0 flex-1 flex flex-col">
-            <div className="px-6 py-4 border-b border-border bg-card sticky top-[130px] z-10">
+            <div className="px-6 py-4 border-b border-border bg-card sticky top-[130px] z-10 space-y-4">
               <div className="max-w-2xl">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
@@ -64,6 +113,65 @@ const Index = () => {
                     className="pl-10"
                   />
                 </div>
+              </div>
+              
+              <div className="flex gap-2 flex-wrap items-center">
+                <Select value={topicFilter} onValueChange={setTopicFilter}>
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Kategoria" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Wszystkie kategorie</SelectItem>
+                    <SelectItem value="ENVIRONMENT">Środowisko</SelectItem>
+                    <SelectItem value="EDUCATION">Edukacja</SelectItem>
+                    <SelectItem value="TECH">Technologia</SelectItem>
+                    <SelectItem value="COMMUNITY">Społeczność</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <Select value={dateFilter} onValueChange={setDateFilter}>
+                  <SelectTrigger className="w-[150px]">
+                    <SelectValue placeholder="Data" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Wszystkie daty</SelectItem>
+                    <SelectItem value="today">Dziś</SelectItem>
+                    <SelectItem value="tomorrow">Jutro</SelectItem>
+                    <SelectItem value="future">Później</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="icon">
+                      <SlidersHorizontal className="h-4 w-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuLabel>Sortuj</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
+                      <DropdownMenuRadioItem value="date-asc">Data (od najwcześniejszej)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="date-desc">Data (od najpóźniejszej)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="title-asc">Nazwa (A-Z)</DropdownMenuRadioItem>
+                      <DropdownMenuRadioItem value="title-desc">Nazwa (Z-A)</DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc') && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setTopicFilter('all');
+                      setDateFilter('all');
+                      setSortBy('date-asc');
+                    }}
+                  >
+                    Wyczyść filtry
+                  </Button>
+                )}
               </div>
             </div>
 
