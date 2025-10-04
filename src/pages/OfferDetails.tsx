@@ -4,6 +4,13 @@ import { Button } from '@/components/ui/button';
 import Layout from '@/components/Layout';
 import { mockOffers } from '@/data/mockOffers';
 
+// TODO: This component will need to handle different application statuses:
+// - No application yet (current view)
+// - Pending (waiting for organizer approval)
+// - Accepted (approved by organizer)
+// - Rejected (declined by organizer)
+// - Completed (event finished)
+
 const OfferDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();

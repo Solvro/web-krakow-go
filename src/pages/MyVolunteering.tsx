@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -5,6 +6,8 @@ import { Calendar, CheckCircle } from 'lucide-react';
 import { mockApplications, ApplicationStatus } from '@/data/mockApplications';
 
 const MyVolunteering = () => {
+  const navigate = useNavigate();
+  
   const currentApplications = mockApplications.filter(
     app => app.status === 'accepted' || app.status === 'pending'
   );
@@ -50,7 +53,11 @@ const MyVolunteering = () => {
           <div className="space-y-4">
             {currentApplications.length > 0 ? (
               currentApplications.map((app) => (
-                <Card key={app.id} className="p-5 bg-card border-border hover:shadow-md transition-shadow">
+                <Card 
+                  key={app.id} 
+                  className="p-5 bg-card border-border hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => navigate(`/oferta/${app.offerId}`)}
+                >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
@@ -88,7 +95,11 @@ const MyVolunteering = () => {
           <div className="space-y-4">
             {completedApplications.length > 0 ? (
               completedApplications.map((app) => (
-                <Card key={app.id} className="p-5 bg-card border-border hover:shadow-md transition-shadow">
+                <Card 
+                  key={app.id} 
+                  className="p-5 bg-card border-border hover:shadow-md transition-shadow cursor-pointer"
+                  onClick={() => navigate(`/oferta/${app.offerId}`)}
+                >
                   <div className="flex flex-col gap-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex-1">
