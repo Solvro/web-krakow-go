@@ -71,8 +71,12 @@ const MyVolunteering = () => {
     fetchSubmissions();
   }, []);
   
+  const upcomingApplications = applications.filter(
+    app => app.status === 'ACCEPTED'
+  );
+  
   const currentApplications = applications.filter(
-    app => app.status === 'ACCEPTED' || app.status === 'PENDING' || app.status === 'REJECTED'
+    app => app.status === 'PENDING' || app.status === 'REJECTED'
   );
   
   const completedApplications = applications.filter(
@@ -127,10 +131,42 @@ const MyVolunteering = () => {
   return (
     <Layout title="Mój Wolontariat">
       <div className="max-w-3xl mx-auto px-6 py-6 space-y-8">
+        {/* Upcoming Section */}
+        <section>
+          <h2 className="text-2xl font-bold text-foreground mb-4">
+            Nadchodzące
+          </h2>
+          
+          <div className="space-y-4">
+            {upcomingApplications.length > 0 ? (
+              upcomingApplications.map((app) => (
+                <EventCard 
+                  key={app.id}
+                  onClick={() => navigate(`/oferta/${app.eventId}`)}
+                >
+                  <EventHeader>
+                    <EventContent>
+                      <EventTitle title={app.title} />
+                      <EventOrganizer organizer={app.organizer} />
+                    </EventContent>
+                    {getStatusBadge(app.status)}
+                  </EventHeader>
+                  
+                  <EventInfo icon={Calendar} text={app.date} />
+                </EventCard>
+              ))
+            ) : (
+              <p className="text-center text-muted-foreground py-8">
+                Brak nadchodzących wydarzeń
+              </p>
+            )}
+          </div>
+        </section>
+
         {/* Current and Pending Section */}
         <section>
           <h2 className="text-2xl font-bold text-foreground mb-4">
-            Aktualne i Oczekujące
+            Oczekujące
           </h2>
           
           <div className="space-y-4">
