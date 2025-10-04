@@ -473,15 +473,25 @@ const OfferDetails = () => {
                   <div className="space-y-4 pt-2">
                     <div>
                       <h4 className="text-sm font-semibold text-muted-foreground mb-1">Data zgłoszenia</h4>
-                      <p className="text-foreground">10 czerwca 2024</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-muted-foreground mb-1">Twoja wiadomość</h4>
                       <p className="text-foreground">
-                        Jestem bardzo zainteresowany pomocą przy organizacji festiwalu. 
-                        Mam doświadczenie w pracy z ludźmi i chętnie się zaangażuję.
+                        {currentSubmission?.createdAt 
+                          ? new Date(currentSubmission.createdAt).toLocaleDateString('pl-PL', { 
+                              year: 'numeric', 
+                              month: 'long', 
+                              day: 'numeric' 
+                            })
+                          : 'Brak danych'
+                        }
                       </p>
                     </div>
+                    {currentSubmission?.description && (
+                      <div>
+                        <h4 className="text-sm font-semibold text-muted-foreground mb-1">Twoja wiadomość</h4>
+                        <p className="text-foreground">
+                          {currentSubmission.description}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </CollapsibleContent>
               </Collapsible>
