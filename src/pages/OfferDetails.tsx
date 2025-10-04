@@ -28,32 +28,35 @@ const OfferDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [organizationName, setOrganizationName] = useState<string>('Organizator');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentSubmission, setCurrentSubmission] = useState<any>(null);
   
   const handleRegistration = async () => {
     if (!id) return;
+    
+    // Prevent re-submission for approved or completed events
+    if (currentSubmission && (currentSubmission.status === 'APPROVED' || currentSubmission.status === 'COMPLETED')) {
+      toast({
+        title: "Nie można zmienić statusu",
+        description: "To zgłoszenie jest już zaakceptowane lub ukończone.",
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsSubmitting(true);
     try {
       // Hard-coded volunteer ID for Anna
       const volunteerId = 'vol-ania';
       
-      // Check if submission already exists
-      const { data: existingSubmission } = await supabase
-        .from('Submission')
-        .select('*')
-        .eq('eventId', id)
-        .eq('volunteerId', volunteerId)
-        .maybeSingle();
-      
-      if (existingSubmission) {
-        // Update existing submission to PENDING if it was rejected or something
+      if (currentSubmission) {
+        // Update existing submission to PENDING
         await supabase
           .from('Submission')
           .update({ 
             status: 'PENDING',
             updatedAt: new Date().toISOString()
           })
-          .eq('id', existingSubmission.id);
+          .eq('id', currentSubmission.id);
         
         toast({
           title: "Zgłoszenie zaktualizowane!",
@@ -112,6 +115,16 @@ const OfferDetails = () => {
           if (organization) {
             setOrganizationName(organization.name);
           }
+
+          // Check if user has already submitted
+          const { data: existingSubmission } = await supabase
+            .from('Submission')
+            .select('*')
+            .eq('eventId', id)
+            .eq('volunteerId', 'vol-ania')
+            .maybeSingle();
+          
+          setCurrentSubmission(existingSubmission);
         } else {
           setError('Nie znaleziono oferty');
         }
@@ -126,7 +139,13 @@ const OfferDetails = () => {
     fetchEvent();
   }, [id]);
   
-  const application = mockApplications.find(app => app.offerId === id);
+  const application = currentSubmission ? {
+    ...mockApplications[0],
+    status: currentSubmission.status === 'APPROVED' ? 'accepted' as ApplicationStatus : 
+            currentSubmission.status === 'COMPLETED' ? 'completed' as ApplicationStatus :
+            currentSubmission.status === 'REJECTED' ? 'rejected' as ApplicationStatus :
+            'pending' as ApplicationStatus
+  } : null;
 
   if (isLoading) {
     return (
