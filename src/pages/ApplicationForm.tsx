@@ -91,7 +91,7 @@ const ApplicationForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-foreground font-semibold">
-                      Uzasadnienie chęci udziału
+                      Uzasadnienie chęci udziału <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea 
@@ -112,7 +112,7 @@ const ApplicationForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-foreground font-semibold">
-                      Dostępność
+                      Dostępność <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Input 
@@ -132,7 +132,7 @@ const ApplicationForm = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="text-foreground font-semibold">
-                      Doświadczenie i umiejętności
+                      Doświadczenie i umiejętności <span className="text-destructive">*</span>
                     </FormLabel>
                     <FormControl>
                       <Textarea 
