@@ -1,10 +1,8 @@
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { mockOffers } from '@/data/mockOffers';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,6 +10,7 @@ import * as z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { toast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import Layout from '@/components/Layout';
 
 const formSchema = z.object({
   motivation: z.string().min(10, { message: 'Uzasadnienie musi mieć co najmniej 10 znaków' }),
@@ -62,22 +61,7 @@ const ApplicationForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="bg-card border-b border-border px-6 py-4 sticky top-0 z-10">
-        <div className="max-w-3xl mx-auto flex items-center gap-4">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate(-1)}
-            className="shrink-0"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Button>
-          <h1 className="text-lg font-semibold text-foreground">Formularz zgłoszeniowy</h1>
-        </div>
-      </header>
-
+    <Layout title="Formularz zgłoszeniowy" showBackButton showBottomNav={false}>
       {/* Content */}
       <div className="flex-1 overflow-y-auto pb-24">
         <div className="max-w-3xl mx-auto px-6 py-8 space-y-8">
@@ -196,7 +180,7 @@ const ApplicationForm = () => {
           </Button>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
