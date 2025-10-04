@@ -17,7 +17,7 @@ import {
 import { format } from 'date-fns';
 import { pl } from 'date-fns/locale';
 
-type SubmissionStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'COMPLETED';
+type SubmissionStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'COMPLETED';
 
 interface Application {
   id: string;
@@ -72,7 +72,7 @@ const MyVolunteering = () => {
   }, []);
   
   const upcomingApplications = applications.filter(
-    app => app.status === 'ACCEPTED'
+    app => app.status === 'APPROVED'
   );
   
   const currentApplications = applications.filter(
