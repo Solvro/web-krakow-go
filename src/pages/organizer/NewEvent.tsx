@@ -85,7 +85,7 @@ const NewEvent = () => {
       console.error('Error creating event:', error);
       toast({
         title: "Błąd",
-        description: "Nie udało się utworzyć wydarzenia.",
+        description: "To na razie koncept :) Jeszcze nie działa",
         variant: "destructive",
       });
     } finally {
