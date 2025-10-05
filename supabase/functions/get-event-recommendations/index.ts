@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
       .from('Submission')
       .select('eventId')
       .eq('volunteerId', volunteerId)
-      .eq('status', 'ACCEPTED');
+      .eq('status', 'APPROVED');
 
     if (submissionsError) {
       console.error('Error fetching attended events:', submissionsError);
