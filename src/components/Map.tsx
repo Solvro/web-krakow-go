@@ -99,17 +99,23 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
         el.className = 'w-8 h-8 rounded-full cursor-pointer border-2 border-white shadow-lg transition-transform hover:scale-125';
         el.style.backgroundColor = 'hsl(var(--primary))';
         
-        // Create popup
+        // Create popup with navigation button
         const popup = new mapboxgl.Popup({ 
           offset: 25,
-          closeButton: false,
+          closeButton: true,
           className: 'event-popup'
         }).setHTML(`
           <div class="p-3 min-w-[200px]">
             <h3 class="font-semibold text-sm mb-1">${event.title}</h3>
             <p class="text-xs text-muted-foreground mb-1">${event.Organization?.name || 'Organizator'}</p>
             <p class="text-xs text-muted-foreground mb-1">${event.placeName}</p>
-            <p class="text-xs text-muted-foreground">${format(new Date(event.startDate), 'd MMM yyyy, HH:mm', { locale: pl })}</p>
+            <p class="text-xs text-muted-foreground mb-2">${format(new Date(event.startDate), 'd MMM yyyy, HH:mm', { locale: pl })}</p>
+            <button 
+              class="w-full bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-2 rounded-md text-xs font-medium transition-colors"
+              data-event-id="${event.id}"
+            >
+              Zobacz wydarzenie
+            </button>
           </div>
         `);
 
@@ -120,18 +126,19 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
 
         markersRef.current.push(marker);
 
-        // Navigate on click
+        // Show popup on marker click
         el.addEventListener('click', () => {
-          navigate(`/oferta/${event.id}`);
-        });
-
-        // Show popup on hover
-        el.addEventListener('mouseenter', () => {
           popup.addTo(map.current!);
         });
 
-        el.addEventListener('mouseleave', () => {
-          popup.remove();
+        // Handle button click in popup
+        popup.on('open', () => {
+          const button = document.querySelector(`[data-event-id="${event.id}"]`);
+          if (button) {
+            button.addEventListener('click', () => {
+              navigate(`/oferta/${event.id}`);
+            });
+          }
         });
       });
     } else if (!showAllEvents && latitude && longitude) {

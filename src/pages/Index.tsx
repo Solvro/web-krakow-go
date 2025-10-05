@@ -288,44 +288,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="mapa" className="m-0 flex-1">
-            <div className="relative h-full">
-              <div className="absolute top-4 left-6 right-6 z-10">
-                <div className="bg-card rounded-full shadow-lg flex items-center px-4 py-3 max-w-2xl mx-auto">
-                  <Search className="w-5 h-5 text-muted-foreground mr-3" />
-                  <Input
-                    type="text"
-                    placeholder="Szukaj ofert"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
-                  />
-                </div>
-              </div>
-              <Map showAllEvents={true} />
-            </div>
-
-            {showOffers && (
-              <div className="absolute bottom-0 left-0 right-0 bg-card border-t border-border max-h-[40vh] flex flex-col">
-                <div className="px-6 py-4 flex justify-between items-center border-b border-border flex-shrink-0">
-                  <h2 className="text-xl font-semibold text-foreground">Dostępne Oferty</h2>
-                  <Button variant="ghost" size="icon" onClick={() => setShowOffers(false)}>
-                    <X className="w-5 h-5" />
-                  </Button>
-                </div>
-
-                <div className="p-6 space-y-4 overflow-y-auto">
-                   {renderOfferList()}
-                </div>
-              </div>
-            )}
-
-            {!showOffers && (
-              <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-10">
-                <Button onClick={() => setShowOffers(true)} className="shadow-lg">
-                  Pokaż oferty
-                </Button>
-              </div>
-            )}
+            <Map showAllEvents={true} />
           </TabsContent>
         </Tabs>
       </div>
