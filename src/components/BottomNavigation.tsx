@@ -13,9 +13,15 @@ const BottomNavigation = () => {
       path: '/',
     },
     {
+      id: 'volunteering',
+      label: 'Wolontariat',
+      icon: HandHeart,
+      path: '/moj-wolontariat',
+    },
+    {
       id: 'feed',
       label: 'Feed',
-      icon: HandHeart,
+      icon: MessageCircle,
       path: '/feed',
     },
     {
@@ -26,7 +32,7 @@ const BottomNavigation = () => {
     },
     {
       id: 'chats',
-      label: 'Wiadomości',
+      label: 'Czaty',
       icon: MessageCircle,
       path: '/czaty',
     },

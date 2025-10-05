@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Heart, ThumbsUp, Leaf, Users } from 'lucide-react';
+import { Heart, Leaf, Users } from 'lucide-react';
 import { FeedPost } from '@/data/mockFeedPosts';
 import { useState } from 'react';
 
@@ -71,7 +71,7 @@ const FeedPostCard = ({ post }: FeedPostCardProps) => {
           size="lg"
           className="gap-2"
         >
-          <ThumbsUp className="w-4 h-4" />
+          <Heart className={`w-4 h-4 ${congratulated ? 'fill-current' : ''}`} />
           {congratulated ? 'POGRATULOWANO' : 'POGRATULUJ'}
         </Button>
         <div className="flex items-center gap-2 text-destructive">
