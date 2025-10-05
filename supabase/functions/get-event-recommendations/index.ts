@@ -100,11 +100,18 @@ Deno.serve(async (req) => {
     }
 
     // Calculate average embedding from attended events
-    const embeddingDim = attendedEvents[0].embedding.length;
+    // Parse embedding if it's a string (vector type from Postgres)
+    const firstEmbedding = typeof attendedEvents[0].embedding === 'string' 
+      ? JSON.parse(attendedEvents[0].embedding) 
+      : attendedEvents[0].embedding;
+    const embeddingDim = firstEmbedding.length;
     const avgEmbedding = new Array(embeddingDim).fill(0);
     
     attendedEvents.forEach(event => {
-      event.embedding.forEach((val: number, idx: number) => {
+      const embedding = typeof event.embedding === 'string' 
+        ? JSON.parse(event.embedding) 
+        : event.embedding;
+      embedding.forEach((val: number, idx: number) => {
         avgEmbedding[idx] += val;
       });
     });
@@ -156,7 +163,10 @@ Deno.serve(async (req) => {
 
     // Calculate cosine similarity for each candidate event
     const eventsWithSimilarity = candidateEvents.map(event => {
-      const similarity = cosineSimilarity(avgEmbedding, event.embedding);
+      const embedding = typeof event.embedding === 'string' 
+        ? JSON.parse(event.embedding) 
+        : event.embedding;
+      const similarity = cosineSimilarity(avgEmbedding, embedding);
       return { ...event, similarity };
     });
 
