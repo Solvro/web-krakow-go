@@ -148,7 +148,7 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
     }
   }, [events, latitude, longitude, showAllEvents, navigate]);
 
-  return <div ref={mapContainer} className="h-full w-full rounded-lg" />;
+  return <div ref={mapContainer} className="h-[500px] w-full rounded-lg" />;
 };
 
 export default Map;
