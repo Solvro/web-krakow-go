@@ -24,6 +24,7 @@ const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [events, setEvents] = useState<{ [key: string]: any }>({});
+  const [schoolName, setSchoolName] = useState<string>('');
 
   useEffect(() => {
     const fetchVolunteer = async () => {
@@ -34,6 +35,19 @@ const Profile = () => {
         const data = await api.getVolunteerById(volunteerId);
         if (data) {
           setVolunteer(data);
+          
+          // Fetch school name if schoolId exists
+          if (data.schoolId) {
+            const { data: school } = await supabase
+              .from('School')
+              .select('name')
+              .eq('id', data.schoolId)
+              .maybeSingle();
+            
+            if (school) {
+              setSchoolName(school.name);
+            }
+          }
           
           // Fetch event details for all certificates
           const eventPromises = data.certificates.map((cert: any) => 
@@ -160,6 +174,7 @@ const Profile = () => {
             <h1 className="text-2xl font-bold">{volunteer.name}</h1>
             <p className="text-muted-foreground">{age} lata</p>
             <p className="text-muted-foreground">{volunteer.email}</p>
+            {schoolName && <p className="text-muted-foreground">{schoolName}</p>}
           </div>
         </div>
 

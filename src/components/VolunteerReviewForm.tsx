@@ -9,9 +9,10 @@ interface VolunteerReviewFormProps {
   volunteerId: string;
   volunteerName: string;
   eventId: string;
+  onReviewSubmitted?: () => void;
 }
 
-const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId }: VolunteerReviewFormProps) => {
+const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId, onReviewSubmitted }: VolunteerReviewFormProps) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
