@@ -9,10 +9,9 @@ interface VolunteerReviewFormProps {
   volunteerId: string;
   volunteerName: string;
   eventId: string;
-  onReviewSubmitted?: () => void;
 }
 
-const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId, onReviewSubmitted }: VolunteerReviewFormProps) => {
+const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId }: VolunteerReviewFormProps) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -40,8 +39,6 @@ const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId, onReviewSubm
         title: 'Sukces!',
         description: 'Opinia została wysłana',
       });
-      
-      onReviewSubmitted?.();
     } catch (error) {
       toast({
         title: 'Błąd',
