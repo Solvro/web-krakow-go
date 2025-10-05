@@ -181,8 +181,8 @@ const Index = () => {
           </div>
 
           <TabsContent value="lista" className="m-0 flex-1 flex flex-col">
-            <div className="px-6 py-4 border-b border-border bg-card sticky top-[130px] z-10 space-y-4">
-              <div className="max-w-2xl">
+            <div className="py-4 border-b border-border bg-card sticky top-[130px] z-10 space-y-4">
+              <div className="px-6 max-w-2xl">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                   <Input
@@ -195,7 +195,7 @@ const Index = () => {
                 </div>
               </div>
               
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto px-6">
                 <div className="flex gap-2 items-center pb-2" style={{ minWidth: 'min-content' }}>
                   <Button 
                     variant="default" 
@@ -253,13 +253,15 @@ const Index = () => {
               </div>
 
               {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc' || showAIRecommendations) && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFiltersAndResetView}
-                >
-                  Wyczyść filtry
-                </Button>
+                <div className="px-6">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={clearFiltersAndResetView}
+                  >
+                    Wyczyść filtry
+                  </Button>
+                </div>
               )}
             </div>
 
