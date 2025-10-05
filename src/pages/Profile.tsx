@@ -178,10 +178,16 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Points Display */}
-        <div>
-          <h2 className="text-lg font-semibold mb-3">Punkty</h2>
-          <p className="text-3xl font-bold text-primary">{volunteer.points}</p>
+        {/* Points and Ranking Display */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-card rounded-xl p-6">
+            <h2 className="text-sm font-medium mb-2 text-muted-foreground">Punkty</h2>
+            <p className="text-4xl font-bold text-primary">{volunteer.points}</p>
+          </div>
+          <div className="bg-card rounded-xl p-6">
+            <h2 className="text-sm font-medium mb-2 text-muted-foreground">Miejsce w rankingu</h2>
+            <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
+          </div>
         </div>
 
         {/* Badges Section */}
