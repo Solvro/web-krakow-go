@@ -15,6 +15,7 @@ import Map from '@/components/Map';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import VolunteerTaskList from '@/components/VolunteerTaskList';
 
 const statusConfig: Record<ApplicationStatus, { label: string; color: string }> = {
   pending: { label: 'Zgłoszenie wysłane - Oczekuje na rozpatrzenie', color: 'text-blue-600' },
@@ -280,11 +281,18 @@ const OfferDetails = () => {
               </TabsList>
 
               <TabsContent value="harmonogram" className="mt-6">
-                <div className="bg-card rounded-xl p-6 space-y-6">
-                  {/* Schedule Header */}
-                  <h3 className="text-xl font-bold text-foreground">
-                    Plan działania - 15 czerwca 2024
-                  </h3>
+                <div className="space-y-6">
+                  {/* Volunteer Task List */}
+                  <VolunteerTaskList 
+                    eventId={offer.id}
+                    volunteerId="vol-ania"
+                  />
+                
+                  <div className="bg-card rounded-xl p-6 space-y-6">
+                    {/* Schedule Header */}
+                    <h3 className="text-xl font-bold text-foreground">
+                      Plan działania - 15 czerwca 2024
+                    </h3>
 
                 {/* Timeline */}
                 <div className="space-y-6 relative">
@@ -362,7 +370,8 @@ const OfferDetails = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+                </div>
+                </div>
               </TabsContent>
 
               <TabsContent value="szczegoly" className="mt-6">

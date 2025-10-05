@@ -9,6 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import Map from '@/components/Map';
 import VolunteerReviewForm from '@/components/VolunteerReviewForm';
+import TaskManager from '@/components/TaskManager';
 
 // Hardcoded organization ID for demo
 const DEMO_ORG_ID = 'org-krakow-razem';
@@ -342,6 +343,15 @@ const EventDetails = () => {
                 </Tabs>
               </CardContent>
             </Card>
+
+            {/* Task Manager Section */}
+            <TaskManager 
+              eventId={event.id}
+              approvedVolunteers={filterSubmissions('APPROVED').map(s => ({
+                id: s.volunteerId,
+                name: s.volunteerName || 'Wolontariusz'
+              }))}
+            />
 
             {/* Reviews Section */}
             {filterSubmissions('APPROVED').length > 0 && (
