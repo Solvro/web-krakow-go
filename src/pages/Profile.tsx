@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Calendar, Pencil, TrendingUp } from 'lucide-react';
+import { Calendar, Pencil, Star } from 'lucide-react';
 import BadgeCard from '@/components/BadgeCard';
 import { mockBadges } from '@/data/mockBadges';
 import { api } from '@/services/api';
@@ -25,6 +25,7 @@ const Profile = () => {
   const [error, setError] = useState<string | null>(null);
   const [events, setEvents] = useState<{ [key: string]: any }>({});
   const [schoolName, setSchoolName] = useState<string>('');
+  const [averageRating, setAverageRating] = useState<number>(0);
 
   useEffect(() => {
     const fetchVolunteer = async () => {
@@ -63,6 +64,19 @@ const Profile = () => {
           }, {} as { [key: string]: any });
           
           setEvents(eventsMap);
+          
+          // Fetch volunteer's reviews to calculate average rating
+          const { data: submissions } = await supabase
+            .from('Submission')
+            .select('rating')
+            .eq('volunteerId', volunteerId)
+            .not('rating', 'is', null);
+          
+          if (submissions && submissions.length > 0) {
+            const validRatings = submissions.filter((s: any) => s.rating != null);
+            const avg = validRatings.reduce((sum: number, s: any) => sum + s.rating, 0) / validRatings.length;
+            setAverageRating(Math.round(avg * 10) / 10);
+          }
         } else {
           setError('Nie znaleziono wolontariusza');
         }
@@ -187,13 +201,10 @@ const Profile = () => {
               <p className="text-4xl font-bold text-primary">{volunteer.points}</p>
             </div>
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Ranking szkoły</p>
-              <div className="flex items-center gap-3">
-                <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
-                <div className="flex items-center gap-1 text-green-500">
-                  <TrendingUp className="w-5 h-5" />
-                  <span className="text-sm font-semibold">+2</span>
-                </div>
+              <p className="text-sm text-muted-foreground mb-2">Średnia ocena</p>
+              <div className="flex items-center gap-2">
+                <p className="text-4xl font-bold text-primary">{averageRating > 0 ? averageRating.toFixed(1) : '-'}</p>
+                <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
               </div>
             </div>
             <div className="bg-card rounded-xl p-6">
