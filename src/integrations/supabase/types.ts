@@ -241,6 +241,7 @@ export type Database = {
         Row: {
           createdAt: string
           description: string | null
+          embedding: string | null
           endDate: string
           id: string
           latitude: number
@@ -255,6 +256,7 @@ export type Database = {
         Insert: {
           createdAt?: string
           description?: string | null
+          embedding?: string | null
           endDate: string
           id: string
           latitude: number
@@ -269,6 +271,7 @@ export type Database = {
         Update: {
           createdAt?: string
           description?: string | null
+          embedding?: string | null
           endDate?: string
           id?: string
           latitude?: number
@@ -492,9 +495,13 @@ export type Database = {
           createdAt: string
           email: string
           id: string
+          interests: string[] | null
           name: string
+          past_events: string[] | null
           points: number
+          preference_embedding: string | null
           schoolId: string | null
+          skills: string[] | null
           updatedAt: string
         }
         Insert: {
@@ -502,9 +509,13 @@ export type Database = {
           createdAt?: string
           email: string
           id: string
+          interests?: string[] | null
           name: string
+          past_events?: string[] | null
           points?: number
+          preference_embedding?: string | null
           schoolId?: string | null
+          skills?: string[] | null
           updatedAt: string
         }
         Update: {
@@ -512,9 +523,13 @@ export type Database = {
           createdAt?: string
           email?: string
           id?: string
+          interests?: string[] | null
           name?: string
+          past_events?: string[] | null
           points?: number
+          preference_embedding?: string | null
           schoolId?: string | null
+          skills?: string[] | null
           updatedAt?: string
         }
         Relationships: [
@@ -527,12 +542,142 @@ export type Database = {
           },
         ]
       }
+      volunteer_event_interactions: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          interaction_type: string
+          volunteer_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          interaction_type: string
+          volunteer_id: string
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          interaction_type?: string
+          volunteer_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_event_interactions_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "Event"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "volunteer_event_interactions_volunteer_id_fkey"
+            columns: ["volunteer_id"]
+            isOneToOne: false
+            referencedRelation: "Volunteer"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      binary_quantize: {
+        Args: { "": string } | { "": unknown }
+        Returns: unknown
+      }
+      halfvec_avg: {
+        Args: { "": number[] }
+        Returns: unknown
+      }
+      halfvec_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      halfvec_send: {
+        Args: { "": unknown }
+        Returns: string
+      }
+      halfvec_typmod_in: {
+        Args: { "": unknown[] }
+        Returns: number
+      }
+      hnsw_bit_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      hnsw_halfvec_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      hnsw_sparsevec_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      hnswhandler: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      ivfflat_bit_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      ivfflat_halfvec_support: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      ivfflathandler: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      l2_norm: {
+        Args: { "": unknown } | { "": unknown }
+        Returns: number
+      }
+      l2_normalize: {
+        Args: { "": string } | { "": unknown } | { "": unknown }
+        Returns: string
+      }
+      sparsevec_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      sparsevec_send: {
+        Args: { "": unknown }
+        Returns: string
+      }
+      sparsevec_typmod_in: {
+        Args: { "": unknown[] }
+        Returns: number
+      }
+      vector_avg: {
+        Args: { "": number[] }
+        Returns: string
+      }
+      vector_dims: {
+        Args: { "": string } | { "": unknown }
+        Returns: number
+      }
+      vector_norm: {
+        Args: { "": string }
+        Returns: number
+      }
+      vector_out: {
+        Args: { "": string }
+        Returns: unknown
+      }
+      vector_send: {
+        Args: { "": string }
+        Returns: string
+      }
+      vector_typmod_in: {
+        Args: { "": unknown[] }
+        Returns: number
+      }
     }
     Enums: {
       ChatType: "EVENT" | "PRIVATE"
