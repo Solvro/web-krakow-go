@@ -41,7 +41,7 @@ const Layout = ({
               {title}
             </h1>
           ) : (
-            <img src={logo} alt="Młody Kraków" className={`flex-1 object-contain ${!showBackButton ? 'h-10' : 'h-8'}`} />
+            <img src={logo} alt="Młody Kraków" className={`flex-1 object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
           )}
         </div>
       </header>
