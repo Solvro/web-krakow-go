@@ -187,7 +187,7 @@ const Profile = () => {
               <p className="text-4xl font-bold text-primary">{volunteer.points}</p>
             </div>
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Miejsce w rankingu szkoły</p>
+              <p className="text-sm text-muted-foreground mb-2">Ranking szkoły</p>
               <div className="flex items-center gap-3">
                 <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
                 <div className="flex items-center gap-1 text-green-500">
@@ -197,8 +197,8 @@ const Profile = () => {
               </div>
             </div>
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Szacunkowe godziny</p>
-              <p className="text-4xl font-bold text-primary">{totalHours}</p>
+              <p className="text-sm text-muted-foreground mb-2">Spędzone godziny</p>
+              <p className="text-4xl font-bold text-primary">{totalHours} h</p>
             </div>
             <div className="bg-card rounded-xl p-6">
               <p className="text-sm text-muted-foreground mb-2">Certyfikaty</p>
