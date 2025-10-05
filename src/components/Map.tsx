@@ -55,7 +55,7 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
 
   // Initialize map only once
   useEffect(() => {
-    if (!mapContainer.current || !mapboxToken || map.current) return;
+    if (!mapContainer.current || map.current) return;
 
     mapboxgl.accessToken = mapboxToken;
     
@@ -63,20 +63,26 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
     const centerLat = showAllEvents ? 50.0647 : (latitude || 50.0647);
     const zoomLevel = showAllEvents ? 12 : 14;
 
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/light-v11',
-      center: [centerLng, centerLat],
-      zoom: zoomLevel,
-    });
+    try {
+      map.current = new mapboxgl.Map({
+        container: mapContainer.current,
+        style: 'mapbox://styles/mapbox/light-v11',
+        center: [centerLng, centerLat],
+        zoom: zoomLevel,
+      });
 
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+      map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    } catch (error) {
+      console.error('Error initializing map:', error);
+    }
 
     return () => {
-      map.current?.remove();
-      map.current = null;
+      if (map.current) {
+        map.current.remove();
+        map.current = null;
+      }
     };
-  }, [mapboxToken]); // Only reinitialize if token changes
+  }, [showAllEvents, latitude, longitude]);
 
   // Update markers when events or coordinates change
   useEffect(() => {
