@@ -40,6 +40,9 @@ const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId, onReviewSubm
         title: 'Sukces!',
         description: 'Opinia została wysłana',
       });
+
+      // Call the callback to hide the form
+      onReviewSubmitted?.();
     } catch (error) {
       toast({
         title: 'Błąd',

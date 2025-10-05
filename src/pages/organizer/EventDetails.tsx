@@ -42,6 +42,7 @@ const EventDetails = () => {
   const [event, setEvent] = useState<Event | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [reviewedVolunteers, setReviewedVolunteers] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (id) {
@@ -352,15 +353,19 @@ const EventDetails = () => {
                   <p className="text-sm text-muted-foreground mb-4">
                     Wystaw opinię wolontariuszom, którzy brali udział w wydarzeniu
                   </p>
-                  {filterSubmissions('APPROVED').map((submission) => (
-                    <VolunteerReviewForm
-                      key={submission.id}
-                      volunteerId={submission.volunteerId}
-                      volunteerName={submission.volunteerName || 'Wolontariusz'}
-                      eventId={event?.id || ''}
-                      onReviewSubmitted={fetchEventDetails}
-                    />
-                  ))}
+                  {filterSubmissions('APPROVED')
+                    .filter(submission => !reviewedVolunteers.has(submission.volunteerId))
+                    .map((submission) => (
+                      <VolunteerReviewForm
+                        key={submission.id}
+                        volunteerId={submission.volunteerId}
+                        volunteerName={submission.volunteerName || 'Wolontariusz'}
+                        eventId={event?.id || ''}
+                        onReviewSubmitted={() => {
+                          setReviewedVolunteers(prev => new Set(prev).add(submission.volunteerId));
+                        }}
+                      />
+                    ))}
                 </CardContent>
               </Card>
             )}
