@@ -129,30 +129,30 @@ const StudentManagement = ({ schoolId }: StudentManagementProps) => {
                 return (
                   <div
                     key={student.id}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-4 border rounded-lg hover:bg-accent/50 transition-colors"
                   >
-                    <div className="flex items-center gap-4">
-                      <Avatar>
+                    <div className="flex items-center gap-3">
+                      <Avatar className="flex-shrink-0">
                         <AvatarFallback>
                           {student.name.split(' ').map((n: string) => n[0]).join('')}
                         </AvatarFallback>
                       </Avatar>
-                      <div>
-                        <p className="font-medium">{student.name}</p>
-                        <p className="text-sm text-muted-foreground">{student.email}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">{student.name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{student.email}</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-4">
-                      <div className="text-right">
+                    <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4">
+                      <div className="text-left sm:text-right">
                         <div className="flex items-center gap-1 text-sm font-medium">
                           <Trophy className="w-4 h-4 text-primary" />
                           {student.points} pkt
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p className="text-xs text-muted-foreground whitespace-nowrap">
                           {activeApplications} aktywnych projektów
                         </p>
                       </div>
-                      <Badge variant="secondary">
+                      <Badge variant="secondary" className="flex-shrink-0">
                         {new Date().getFullYear() - new Date(student.birthdate).getFullYear()} lat
                       </Badge>
                     </div>
