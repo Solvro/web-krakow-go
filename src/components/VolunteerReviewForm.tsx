@@ -9,15 +9,9 @@ interface VolunteerReviewFormProps {
   volunteerId: string;
   volunteerName: string;
   eventId: string;
-  onReviewSubmitted?: () => void;
 }
 
-const VolunteerReviewForm = ({ 
-  volunteerId, 
-  volunteerName, 
-  eventId,
-  onReviewSubmitted 
-}: VolunteerReviewFormProps) => {
+const VolunteerReviewForm = ({ volunteerId, volunteerName, eventId }: VolunteerReviewFormProps) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -25,35 +19,31 @@ const VolunteerReviewForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (rating === 0) {
       toast({
-        title: "Błąd",
-        description: "Proszę wybrać ocenę",
-        variant: "destructive",
+        title: 'Błąd',
+        description: 'Proszę wybrać ocenę',
+        variant: 'destructive',
       });
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
-      // Mock submission - in real app would save to database
+      // Mock submission — replace with your actual API call
       await new Promise(resolve => setTimeout(resolve, 500));
-      
+
       toast({
-        title: "Sukces!",
-        description: "Opinia została wysłana",
+        title: 'Sukces!',
+        description: 'Opinia została wysłana',
       });
-      
-      setRating(0);
-      setComment('');
-      onReviewSubmitted?.();
     } catch (error) {
       toast({
-        title: "Błąd",
-        description: "Nie udało się wysłać opinii",
-        variant: "destructive",
+        title: 'Błąd',
+        description: 'Nie udało się wysłać opinii',
+        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
@@ -78,7 +68,7 @@ const VolunteerReviewForm = ({
               Ocena
             </label>
             <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map(star => (
                 <button
                   key={star}
                   type="button"
@@ -105,7 +95,7 @@ const VolunteerReviewForm = ({
             </label>
             <Textarea
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={e => setComment(e.target.value)}
               placeholder="Opisz swoje doświadczenie współpracy z wolontariuszem..."
               className="min-h-[100px]"
               maxLength={500}
@@ -115,11 +105,7 @@ const VolunteerReviewForm = ({
             </p>
           </div>
 
-          <Button
-            type="submit"
-            disabled={isSubmitting || rating === 0}
-            className="w-full"
-          >
+          <Button type="submit" disabled={isSubmitting || rating === 0} className="w-full">
             {isSubmitting ? 'Wysyłanie...' : 'Wyślij opinię'}
           </Button>
         </form>
