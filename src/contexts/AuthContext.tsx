@@ -27,12 +27,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const login = async (email: string, password: string) => {
-    // Mock login - w rzeczywistej aplikacji tutaj byłoby wywołanie API
-    const mockUser: User = {
-      id: '1',
-      email,
-      name: email.split('@')[0],
-    };
+    // Mock login - check for coordinator or volunteer
+    let mockUser: User;
+    
+    if (email === 'koordynator@szkola.pl') {
+      mockUser = {
+        id: 'coordinator-1',
+        email,
+        name: 'Jan Kowalski (Koordynator)',
+      };
+    } else {
+      // Default to volunteer
+      mockUser = {
+        id: 'volunteer-1',
+        email,
+        name: email.split('@')[0],
+      };
+    }
+    
     setUser(mockUser);
     localStorage.setItem('mockUser', JSON.stringify(mockUser));
   };
@@ -40,7 +52,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const register = async (email: string, password: string, name: string) => {
     // Mock register
     const mockUser: User = {
-      id: '1',
+      id: 'volunteer-' + Math.random().toString(36).substr(2, 9),
       email,
       name,
     };
