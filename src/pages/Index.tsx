@@ -32,11 +32,13 @@ import {
 const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showOffers, setShowOffers] = useState(true);
-  const [topicFilter, setTopicFilter] = useState<string>('all');
-  const [dateFilter, setDateFilter] = useState<string>('all');
-  const [sortBy, setSortBy] = useState<string>('date-asc');
+  const [topicFilter, setTopicFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('date-asc');
   const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
   const [showAIRecommendations, setShowAIRecommendations] = useState(false);
+  // State to store the AI-powered recommendations
+  const [aiRecommendations, setAiRecommendations] = useState([]);
 
   const { data: events, isLoading, error } = useQuery({
     queryKey: ['events'],
@@ -65,8 +67,11 @@ const Index = () => {
       if (error) throw error;
 
       if (data?.recommendations?.length > 0) {
-        toast.success(`Znaleziono ${data.recommendations.length} spersonalizowanych rekomendacji!`);
+        // Map and store the recommendations, then switch the view
+        const recommendedOffers = data.recommendations.map(mapEventToVolunteerOffer);
+        setAiRecommendations(recommendedOffers);
         setShowAIRecommendations(true);
+        toast.success(`Znaleziono ${data.recommendations.length} spersonalizowanych rekomendacji!`);
       } else {
         toast.info('Brak rekomendacji. Uzupełnij swój profil, aby otrzymać spersonalizowane propozycje.');
       }
@@ -76,6 +81,15 @@ const Index = () => {
     } finally {
       setIsLoadingRecommendations(false);
     }
+  };
+
+  const clearFiltersAndResetView = () => {
+    setTopicFilter('all');
+    setDateFilter('all');
+    setSortBy('date-asc');
+    setSearchQuery('');
+    // Hide AI recommendations and go back to the main list
+    setShowAIRecommendations(false);
   };
 
   // Filter offers
@@ -114,6 +128,35 @@ const Index = () => {
         return 0;
     }
   });
+  
+  // Decide which list to display: regular filtered list or AI recommendations
+  const offersToDisplay = showAIRecommendations ? aiRecommendations : filteredOffers;
+
+  const renderOfferList = () => (
+    <>
+      {isLoading ? (
+        <>
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+          <Skeleton className="h-32 w-full" />
+        </>
+      ) : error ? (
+        <p className="text-center text-destructive py-8">
+          Błąd podczas ładowania ofert
+        </p>
+      ) : offersToDisplay.length > 0 ? (
+        offersToDisplay.map((offer) => (
+          <VolunteerCard key={offer.id} offer={offer} />
+        ))
+      ) : (
+        <p className="text-center text-muted-foreground py-8">
+          {showAIRecommendations 
+            ? "Nie znaleziono dla Ciebie żadnych rekomendacji." 
+            : "Nie znaleziono ofert pasujących do wyszukiwania"}
+        </p>
+      )}
+    </>
+  );
 
   return (
     <Layout showNotifications>
@@ -206,15 +249,11 @@ const Index = () => {
                   {isLoadingRecommendations ? 'Ładowanie...' : 'Propozycje AI'}
                 </Button>
 
-                {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc') && (
+                {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc' || showAIRecommendations) && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => {
-                      setTopicFilter('all');
-                      setDateFilter('all');
-                      setSortBy('date-asc');
-                    }}
+                    onClick={clearFiltersAndResetView}
                   >
                     Wyczyść filtry
                   </Button>
@@ -223,33 +262,31 @@ const Index = () => {
             </div>
 
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
-              {isLoading ? (
-                <>
-                  <Skeleton className="h-32 w-full" />
-                  <Skeleton className="h-32 w-full" />
-                  <Skeleton className="h-32 w-full" />
-                </>
-              ) : error ? (
-                <p className="text-center text-destructive py-8">
-                  Błąd podczas ładowania ofert
-                </p>
-              ) : filteredOffers.length > 0 ? (
-                filteredOffers.map((offer) => (
-                  <VolunteerCard key={offer.id} offer={offer} />
-                ))
-              ) : (
-                <p className="text-center text-muted-foreground py-8">
-                  Nie znaleziono ofert pasujących do wyszukiwania
-                </p>
+              {showAIRecommendations && (
+                <div className="flex flex-wrap justify-between items-center bg-primary/10 p-3 rounded-lg mb-4 gap-2">
+                    <div className="flex items-center gap-2">
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        <h3 className="font-semibold text-primary">Twoje spersonalizowane rekomendacje</h3>
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setShowAIRecommendations(false)}
+                        className="gap-1.5 text-primary hover:text-primary hover:bg-primary/20"
+                    >
+                        Pokaż wszystkie
+                        <X className="w-4 h-4" />
+                    </Button>
+                </div>
               )}
+              {renderOfferList()}
             </div>
           </TabsContent>
 
           <TabsContent value="mapa" className="m-0 flex-1">
-            <div className="relative h-[calc(100vh-130px)]">
-              {/* Search Bar */}
+            <div className="relative h-full">
               <div className="absolute top-4 left-6 right-6 z-10">
-                <div className="bg-card rounded-full shadow-lg flex items-center px-4 py-3 max-w-2xl">
+                <div className="bg-card rounded-full shadow-lg flex items-center px-4 py-3 max-w-2xl mx-auto">
                   <Search className="w-5 h-5 text-muted-foreground mr-3" />
                   <Input
                     type="text"
@@ -260,40 +297,20 @@ const Index = () => {
                   />
                 </div>
               </div>
-
-              {/* Map */}
               <Map showAllEvents={true} />
             </div>
 
-            {/* Offers Section */}
             {showOffers && (
-              <div className="bg-card border-t border-border">
-                <div className="px-6 py-4 flex justify-between items-center border-b border-border">
+              <div className="absolute bottom-0 left-0 right-0 bg-card border-t border-border max-h-[40vh] flex flex-col">
+                <div className="px-6 py-4 flex justify-between items-center border-b border-border flex-shrink-0">
                   <h2 className="text-xl font-semibold text-foreground">Dostępne Oferty</h2>
                   <Button variant="ghost" size="icon" onClick={() => setShowOffers(false)}>
                     <X className="w-5 h-5" />
                   </Button>
                 </div>
 
-                <div className="p-6 space-y-4 max-h-[500px] overflow-y-auto">
-                  {isLoading ? (
-                    <>
-                      <Skeleton className="h-32 w-full" />
-                      <Skeleton className="h-32 w-full" />
-                    </>
-                  ) : error ? (
-                    <p className="text-center text-destructive py-8">
-                      Błąd podczas ładowania ofert
-                    </p>
-                  ) : filteredOffers.length > 0 ? (
-                    filteredOffers.map((offer) => (
-                      <VolunteerCard key={offer.id} offer={offer} />
-                    ))
-                  ) : (
-                    <p className="text-center text-muted-foreground py-8">
-                      Nie znaleziono ofert pasujących do wyszukiwania
-                    </p>
-                  )}
+                <div className="p-6 space-y-4 overflow-y-auto">
+                   {renderOfferList()}
                 </div>
               </div>
             )}
