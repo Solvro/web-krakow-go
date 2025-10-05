@@ -13,22 +13,22 @@ const BottomNavigation = () => {
       path: '/',
     },
     {
-      id: 'volunteering',
-      label: 'Wolontariat',
+      id: 'feed',
+      label: 'Feed',
       icon: HandHeart,
-      path: '/moj-wolontariat',
-    },
-    {
-      id: 'chats',
-      label: 'Czaty',
-      icon: MessageCircle,
-      path: '/czaty',
+      path: '/feed',
     },
     {
       id: 'profile',
       label: 'Profil',
       icon: User,
       path: '/profil/vol-ania',
+    },
+    {
+      id: 'chats',
+      label: 'Wiadomości',
+      icon: MessageCircle,
+      path: '/czaty',
     },
   ];
 

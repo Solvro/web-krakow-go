@@ -17,6 +17,7 @@ import NewEvent from "./pages/organizer/NewEvent";
 import EventDetails from "./pages/organizer/EventDetails";
 import Chats from "./pages/Chats";
 import ChatRoom from "./pages/ChatRoom";
+import Feed from "./pages/Feed";
 
 const queryClient = new QueryClient();
 
@@ -46,6 +47,7 @@ const App = () => (
                 <Profile />
               </AuthGuard>
             } />
+            <Route path="/feed" element={<Feed />} />
             <Route path="/czaty" element={<Chats />} />
             <Route path="/czaty/:id" element={<ChatRoom />} />
             <Route path="/organizator" element={<OrganizerDashboard />} />
