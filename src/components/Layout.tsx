@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Bell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNavigation from '@/components/BottomNavigation';
-import logo from '@/assets/mlody-krakow-logo.png';
+import krakowGoLogo from '@/assets/krakow-go-logo.png';
+import mlodyKrakowLogo from '@/assets/mlody-krakow-logo.png';
 
 interface LayoutProps {
   children: ReactNode;
@@ -41,7 +42,11 @@ const Layout = ({
               {title}
             </h1>
           ) : (
-            <img src={logo} alt="Młody Kraków" className={`flex-1 object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
+            <div className="flex-1 flex items-center justify-center gap-3">
+              <img src={krakowGoLogo} alt="Krakow Go" className={`object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
+              <span className={`font-bold text-foreground ${!showBackButton ? 'text-2xl' : 'text-xl'}`}>×</span>
+              <img src={mlodyKrakowLogo} alt="Młody Kraków" className={`object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
+            </div>
           )}
         </div>
       </header>
