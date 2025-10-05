@@ -140,31 +140,31 @@ const CertificateManagement = ({ schoolId }: CertificateManagementProps) => {
                 key={cert.id}
                 className="p-4 border rounded-lg space-y-3"
               >
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-semibold">{cert.Volunteer.name}</h3>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                  <div className="space-y-1 flex-1 min-w-0">
+                    <h3 className="font-semibold text-lg">{cert.Volunteer.name}</h3>
                     <p className="text-sm text-muted-foreground">
                       {cert.Event.title}
                     </p>
                   </div>
-                  <Badge variant="secondary" className="flex items-center gap-1">
+                  <Badge variant="secondary" className="flex items-center gap-1 self-start">
                     <CheckCircle className="w-3 h-3" />
                     Zatwierdzone
                   </Badge>
                 </div>
 
-                <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="grid grid-cols-3 gap-3 text-sm">
                   <div>
-                    <p className="text-muted-foreground">Punkty</p>
-                    <p className="font-medium">{cert.points}</p>
+                    <p className="text-muted-foreground text-xs sm:text-sm">Punkty</p>
+                    <p className="font-semibold text-base sm:text-lg">{cert.points}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Zadania</p>
-                    <p className="font-medium">{cert.tasksCount}</p>
+                    <p className="text-muted-foreground text-xs sm:text-sm">Zadania</p>
+                    <p className="font-semibold text-base sm:text-lg">{cert.tasksCount}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground">Data wystawienia</p>
-                    <p className="font-medium">
+                    <p className="text-muted-foreground text-xs sm:text-sm">Data wystawienia</p>
+                    <p className="font-semibold text-sm sm:text-base">
                       {format(new Date(cert.issuedAt), 'dd MMM yyyy', { locale: pl })}
                     </p>
                   </div>
@@ -173,7 +173,7 @@ const CertificateManagement = ({ schoolId }: CertificateManagementProps) => {
                 <Button
                   onClick={() => handleDownloadCertificate(cert)}
                   variant="outline"
-                  size="sm"
+                  size="default"
                   className="w-full"
                 >
                   <Download className="w-4 h-4 mr-2" />
