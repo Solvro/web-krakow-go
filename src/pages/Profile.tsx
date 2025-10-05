@@ -178,20 +178,31 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Points and Ranking Display */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-card rounded-xl p-6">
-            <h2 className="text-sm font-medium mb-2 text-muted-foreground">Punkty</h2>
-            <p className="text-4xl font-bold text-primary">{volunteer.points}</p>
-          </div>
-          <div className="bg-card rounded-xl p-6">
-            <h2 className="text-sm font-medium mb-2 text-muted-foreground">Miejsce w rankingu</h2>
-            <div className="flex items-center gap-3">
-              <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
-              <div className="flex items-center gap-1 text-green-500">
-                <TrendingUp className="w-5 h-5" />
-                <span className="text-sm font-semibold">+2</span>
+        {/* Combined Stats Display */}
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Statystyki</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-card rounded-xl p-6">
+              <p className="text-sm text-muted-foreground mb-2">Punkty</p>
+              <p className="text-4xl font-bold text-primary">{volunteer.points}</p>
+            </div>
+            <div className="bg-card rounded-xl p-6">
+              <p className="text-sm text-muted-foreground mb-2">Miejsce w rankingu</p>
+              <div className="flex items-center gap-3">
+                <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
+                <div className="flex items-center gap-1 text-green-500">
+                  <TrendingUp className="w-5 h-5" />
+                  <span className="text-sm font-semibold">+2</span>
+                </div>
               </div>
+            </div>
+            <div className="bg-card rounded-xl p-6">
+              <p className="text-sm text-muted-foreground mb-2">Szacunkowe godziny</p>
+              <p className="text-4xl font-bold">{totalHours}</p>
+            </div>
+            <div className="bg-card rounded-xl p-6">
+              <p className="text-sm text-muted-foreground mb-2">Certyfikaty</p>
+              <p className="text-4xl font-bold">{volunteer.certificates.length}</p>
             </div>
           </div>
         </div>
@@ -259,20 +270,6 @@ const Profile = () => {
           )}
         </div>
 
-        {/* Summary Stats */}
-        <div>
-          <h2 className="text-lg font-semibold mb-4">Podsumowanie</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Szacunkowe godziny</p>
-              <p className="text-4xl font-bold">{totalHours}</p>
-            </div>
-            <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Certyfikaty</p>
-              <p className="text-4xl font-bold">{volunteer.certificates.length}</p>
-            </div>
-          </div>
-        </div>
       </div>
     </Layout>
   );
