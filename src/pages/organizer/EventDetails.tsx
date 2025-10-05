@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
 import Map from '@/components/Map';
+import VolunteerReviewForm from '@/components/VolunteerReviewForm';
 
 // Hardcoded organization ID for demo
 const DEMO_ORG_ID = 'org-krakow-razem';
@@ -269,8 +270,8 @@ const EventDetails = () => {
             </Card>
           </div>
 
-          {/* Submissions */}
-          <div className="lg:col-span-2">
+          {/* Submissions and Reviews */}
+          <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle>Zgłoszenia ({submissions.length})</CardTitle>
@@ -340,6 +341,29 @@ const EventDetails = () => {
                 </Tabs>
               </CardContent>
             </Card>
+
+            {/* Reviews Section */}
+            {filterSubmissions('APPROVED').length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Opinie o wolontariuszach</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Wystaw opinię wolontariuszom, którzy brali udział w wydarzeniu
+                  </p>
+                  {filterSubmissions('APPROVED').map((submission) => (
+                    <VolunteerReviewForm
+                      key={submission.id}
+                      volunteerId={submission.volunteerId}
+                      volunteerName={submission.volunteerName || 'Wolontariusz'}
+                      eventId={event?.id || ''}
+                      onReviewSubmitted={fetchEventDetails}
+                    />
+                  ))}
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </main>
