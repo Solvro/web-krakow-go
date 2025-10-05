@@ -1,1 +1,10 @@
 project_id = "yrbssqlvlmyfqeywlwyt"
+
+[functions.generate-event-embedding]
+verify_jwt = false
+
+[functions.generate-volunteer-embedding]
+verify_jwt = false
+
+[functions.get-event-recommendations]
+verify_jwt = false
