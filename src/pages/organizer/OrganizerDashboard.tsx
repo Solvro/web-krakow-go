@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Calendar, Users, MapPin, Search } from 'lucide-react';
+import { Plus, Calendar, Users, MapPin, Search, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 // Hardcoded organization ID for demo
 const DEMO_ORG_ID = 'org-krakow-razem';
@@ -39,12 +40,18 @@ interface School {
 
 const OrganizerDashboard = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [events, setEvents] = useState<EventWithSubmissions[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [orgName, setOrgName] = useState('');
   const [schools, setSchools] = useState<School[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoadingSchools, setIsLoadingSchools] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   useEffect(() => {
     fetchOrganizerData();
@@ -165,10 +172,15 @@ const OrganizerDashboard = () => {
               <h1 className="text-3xl font-bold text-foreground">Panel Organizatora</h1>
               <p className="text-muted-foreground mt-1">{orgName}</p>
             </div>
-            <Button onClick={() => navigate('/organizator/nowe-wydarzenie')} size="lg">
-              <Plus className="w-5 h-5 mr-2" />
-              Dodaj wydarzenie
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button onClick={() => navigate('/organizator/nowe-wydarzenie')} size="lg">
+                <Plus className="w-5 h-5 mr-2" />
+                Dodaj wydarzenie
+              </Button>
+              <Button onClick={handleLogout} variant="ghost" size="icon" title="Wyloguj">
+                <LogOut className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
