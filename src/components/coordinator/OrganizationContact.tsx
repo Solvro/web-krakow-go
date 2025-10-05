@@ -35,8 +35,28 @@ const OrganizationContact = ({ coordinatorId }: OrganizationContactProps) => {
       .select('*')
       .order('name');
 
-    setEvents(eventsData || []);
-    setStudents(studentsData || []);
+    // Use real data if available, otherwise use mock data
+    const events = eventsData && eventsData.length > 0 ? eventsData : [
+      {
+        id: 'mock-e1',
+        title: 'Sprzątanie Parku Jordana',
+        Organization: { name: 'Eko Kraków' }
+      },
+      {
+        id: 'mock-e2',
+        title: 'Pomoc w schronisku',
+        Organization: { name: 'Fundacja Pomocy Zwierzętom' }
+      },
+    ];
+
+    const students = studentsData && studentsData.length > 0 ? studentsData : [
+      { id: 'mock-v1', name: 'Anna Kowalska', points: 150 },
+      { id: 'mock-v2', name: 'Jan Nowak', points: 120 },
+      { id: 'mock-v3', name: 'Katarzyna Wiśniewska', points: 95 },
+    ];
+
+    setEvents(events);
+    setStudents(students);
   };
 
   const handleSendRecommendation = async () => {

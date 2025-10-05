@@ -70,8 +70,8 @@ const CoordinatorDashboard = () => {
   };
 
   if (loading) {
-    return (
-      <Layout title="Panel Koordynatora">
+  return (
+    <Layout title="Panel Koordynatora" showBottomNav={false}>
         <div className="flex items-center justify-center min-h-[50vh]">
           <p className="text-muted-foreground">Ładowanie...</p>
         </div>
@@ -81,7 +81,7 @@ const CoordinatorDashboard = () => {
 
 
   return (
-    <Layout title="Panel Koordynatora">
+    <Layout title="Panel Koordynatora" showBottomNav={false}>
       <div className="max-w-7xl mx-auto p-6 space-y-6">
         <div className="space-y-2">
           <h1 className="text-3xl font-bold">Panel Koordynatora Wolontariatu</h1>

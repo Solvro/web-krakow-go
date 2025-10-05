@@ -35,9 +35,51 @@ const CertificateManagement = ({ schoolId }: CertificateManagementProps) => {
         .eq('Volunteer.schoolId', schoolId)
         .order('issuedAt', { ascending: false });
 
-      setCertificates(data || []);
+      if (data && data.length > 0) {
+        setCertificates(data);
+      } else {
+        // Mock certificates
+        const mockCerts = [
+          {
+            id: 'cert-1',
+            volunteerId: 'mock-v1',
+            eventId: 'mock-e1',
+            points: 50,
+            tasksCount: 5,
+            issuedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+            Volunteer: {
+              name: 'Anna Kowalska',
+              email: 'anna.kowalska@student.pl',
+              School: { name: 'Szkoła Demonstracyjna' }
+            },
+            Event: {
+              title: 'Sprzątanie Parku Jordana',
+              Organization: { name: 'Eko Kraków' }
+            }
+          },
+          {
+            id: 'cert-2',
+            volunteerId: 'mock-v2',
+            eventId: 'mock-e2',
+            points: 40,
+            tasksCount: 4,
+            issuedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+            Volunteer: {
+              name: 'Jan Nowak',
+              email: 'jan.nowak@student.pl',
+              School: { name: 'Szkoła Demonstracyjna' }
+            },
+            Event: {
+              title: 'Pomoc w schronisku',
+              Organization: { name: 'Fundacja Pomocy Zwierzętom' }
+            }
+          },
+        ];
+        setCertificates(mockCerts);
+      }
     } catch (error) {
       console.error('Error fetching certificates:', error);
+      setCertificates([]);
     } finally {
       setLoading(false);
     }
