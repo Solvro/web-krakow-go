@@ -1,4 +1,4 @@
-import { Search, HandHeart, User, MessageCircle } from 'lucide-react';
+import { Search, HandHeart, User, MessageCircle, Users } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const BottomNavigation = () => {
@@ -21,7 +21,7 @@ const BottomNavigation = () => {
     {
       id: 'feed',
       label: 'Feed',
-      icon: MessageCircle,
+      icon: Users,
       path: '/feed',
     },
     {
