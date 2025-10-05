@@ -15,6 +15,20 @@ interface CertificateData {
 }
 
 export const generateCertificate = async (data: CertificateData) => {
+  // Helper function to remove Polish diacritics
+  const removeDiacritics = (text: string): string => {
+    return text
+      .replace(/ą/g, 'a').replace(/Ą/g, 'A')
+      .replace(/ć/g, 'c').replace(/Ć/g, 'C')
+      .replace(/ę/g, 'e').replace(/Ę/g, 'E')
+      .replace(/ł/g, 'l').replace(/Ł/g, 'L')
+      .replace(/ń/g, 'n').replace(/Ń/g, 'N')
+      .replace(/ó/g, 'o').replace(/Ó/g, 'O')
+      .replace(/ś/g, 's').replace(/Ś/g, 'S')
+      .replace(/ź/g, 'z').replace(/Ź/g, 'Z')
+      .replace(/ż/g, 'z').replace(/Ż/g, 'Z');
+  };
+
   const COLORS = {
     background: [246, 246, 246] as const, // bg-orange-50
     borderOuter: [251, 146, 60] as const, // orange-400
@@ -71,7 +85,7 @@ export const generateCertificate = async (data: CertificateData) => {
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(20);
   pdf.setTextColor(...COLORS.accent);
-  pdf.text(data.volunteerName, pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text(removeDiacritics(data.volunteerName), pageWidth / 2, yPosition, { align: 'center' });
 
   // Event participation
   yPosition += 15;
@@ -85,7 +99,7 @@ export const generateCertificate = async (data: CertificateData) => {
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(18);
   pdf.setTextColor(...COLORS.accent);
-  const eventTitle = pdf.splitTextToSize(data.eventTitle, pageWidth - 80);
+  const eventTitle = pdf.splitTextToSize(removeDiacritics(data.eventTitle), pageWidth - 80);
   pdf.text(eventTitle, pageWidth / 2, yPosition, { align: 'center' });
 
   // Organization
@@ -93,7 +107,7 @@ export const generateCertificate = async (data: CertificateData) => {
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(14);
   pdf.setTextColor(...COLORS.text);
-  pdf.text(`zorganizowanej przez: ${data.organizationName}`, pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text(`zorganizowanej przez: ${removeDiacritics(data.organizationName)}`, pageWidth / 2, yPosition, { align: 'center' });
 
   // Details
   yPosition += 20;
@@ -116,15 +130,14 @@ export const generateCertificate = async (data: CertificateData) => {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
-  }).replace(/ą/g, 'a').replace(/ć/g, 'c').replace(/ę/g, 'e').replace(/ł/g, 'l')
-    .replace(/ń/g, 'n').replace(/ó/g, 'o').replace(/ś/g, 's').replace(/ź/g, 'z').replace(/ż/g, 'z');
+  });
 
-  pdf.text(`Data wystawienia: ${issueDate}`, pageWidth / 2, yPosition, { align: 'center' });
+  pdf.text(`Data wystawienia: ${removeDiacritics(issueDate)}`, pageWidth / 2, yPosition, { align: 'center' });
 
   yPosition += 8;
   pdf.text(`Szacowany czas zaangazowania: ${estimatedHours} godzin`, pageWidth / 2, yPosition, { align: 'center' });
 
   // Save PDF
-  const fileName = `Certyfikat_${data.volunteerName.replace(/\s+/g, '_')}_${data.eventTitle.substring(0, 10).replace(/\s+/g, '_')}.pdf`;
+  const fileName = `Certyfikat_${removeDiacritics(data.volunteerName).replace(/\s+/g, '_')}_${removeDiacritics(data.eventTitle).substring(0, 10).replace(/\s+/g, '_')}.pdf`;
   pdf.save(fileName);
 };
