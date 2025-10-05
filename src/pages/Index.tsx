@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, X, SlidersHorizontal } from 'lucide-react';
+import { Search, X, SlidersHorizontal, Sparkles } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,8 @@ import Layout from '@/components/Layout';
 import { api } from '@/services/api';
 import { mapEventToVolunteerOffer } from '@/utils/eventMapper';
 import { Skeleton } from '@/components/ui/skeleton';
+import { supabase } from '@/integrations/supabase/client';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
@@ -33,6 +35,8 @@ const Index = () => {
   const [topicFilter, setTopicFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('date-asc');
+  const [isLoadingRecommendations, setIsLoadingRecommendations] = useState(false);
+  const [showAIRecommendations, setShowAIRecommendations] = useState(false);
 
   const { data: events, isLoading, error } = useQuery({
     queryKey: ['events'],
@@ -40,6 +44,39 @@ const Index = () => {
   });
 
   const offers = events ? events.map(mapEventToVolunteerOffer) : [];
+
+  const handleAIRecommendations = async () => {
+    setIsLoadingRecommendations(true);
+    try {
+      // Mock volunteer ID - in production, get from auth context
+      const volunteerId = '1';
+      
+      const { data, error } = await supabase.functions.invoke('get-event-recommendations', {
+        body: { 
+          volunteerId,
+          limit: 10,
+          filters: {
+            ...(topicFilter !== 'all' && { category: topicFilter }),
+            ...(dateFilter !== 'all' && { dateRange: { start: new Date().toISOString() } }),
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data?.recommendations?.length > 0) {
+        toast.success(`Znaleziono ${data.recommendations.length} spersonalizowanych rekomendacji!`);
+        setShowAIRecommendations(true);
+      } else {
+        toast.info('Brak rekomendacji. Uzupełnij swój profil, aby otrzymać spersonalizowane propozycje.');
+      }
+    } catch (error) {
+      console.error('Error getting AI recommendations:', error);
+      toast.error('Błąd podczas pobierania rekomendacji AI');
+    } finally {
+      setIsLoadingRecommendations(false);
+    }
+  };
 
   // Filter offers
   let filteredOffers = offers.filter(
@@ -158,6 +195,16 @@ const Index = () => {
                     </DropdownMenuRadioGroup>
                   </DropdownMenuContent>
                 </DropdownMenu>
+
+                <Button 
+                  variant="default" 
+                  onClick={handleAIRecommendations}
+                  disabled={isLoadingRecommendations}
+                  className="gap-2"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  {isLoadingRecommendations ? 'Ładowanie...' : 'Propozycje AI'}
+                </Button>
 
                 {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc') && (
                   <Button
