@@ -195,70 +195,72 @@ const Index = () => {
                 </div>
               </div>
               
-              <div className="flex gap-2 flex-wrap items-center">
-                <Select value={topicFilter} onValueChange={setTopicFilter}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Kategoria" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Wszystkie kategorie</SelectItem>
-                    <SelectItem value="ENVIRONMENT">Środowisko</SelectItem>
-                    <SelectItem value="EDUCATION">Edukacja</SelectItem>
-                    <SelectItem value="TECH">Technologia</SelectItem>
-                    <SelectItem value="COMMUNITY">Społeczność</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <Select value={dateFilter} onValueChange={setDateFilter}>
-                  <SelectTrigger className="w-[150px]">
-                    <SelectValue placeholder="Data" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Wszystkie daty</SelectItem>
-                    <SelectItem value="today">Dziś</SelectItem>
-                    <SelectItem value="tomorrow">Jutro</SelectItem>
-                    <SelectItem value="future">Później</SelectItem>
-                  </SelectContent>
-                </Select>
-
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <SlidersHorizontal className="h-4 w-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Sortuj</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
-                      <DropdownMenuRadioItem value="date-asc">Data (od najwcześniejszej)</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="date-desc">Data (od najpóźniejszej)</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="title-asc">Nazwa (A-Z)</DropdownMenuRadioItem>
-                      <DropdownMenuRadioItem value="title-desc">Nazwa (Z-A)</DropdownMenuRadioItem>
-                    </DropdownMenuRadioGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                <Button 
-                  variant="default" 
-                  onClick={handleAIRecommendations}
-                  disabled={isLoadingRecommendations}
-                  className="gap-2"
-                >
-                  <Sparkles className="h-4 w-4" />
-                  {isLoadingRecommendations ? 'Ładowanie...' : 'Propozycje AI'}
-                </Button>
-
-                {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc' || showAIRecommendations) && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={clearFiltersAndResetView}
+              <div className="overflow-x-auto">
+                <div className="flex gap-2 items-center pb-2" style={{ minWidth: 'min-content' }}>
+                  <Button 
+                    variant="default" 
+                    onClick={handleAIRecommendations}
+                    disabled={isLoadingRecommendations}
+                    className="gap-2 flex-shrink-0"
                   >
-                    Wyczyść filtry
+                    <Sparkles className="h-4 w-4" />
+                    {isLoadingRecommendations ? 'Ładowanie...' : 'Propozycje AI'}
                   </Button>
-                )}
+
+                  <Select value={topicFilter} onValueChange={setTopicFilter}>
+                    <SelectTrigger className="w-[180px] flex-shrink-0">
+                      <SelectValue placeholder="Kategoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Wszystkie kategorie</SelectItem>
+                      <SelectItem value="ENVIRONMENT">Środowisko</SelectItem>
+                      <SelectItem value="EDUCATION">Edukacja</SelectItem>
+                      <SelectItem value="TECH">Technologia</SelectItem>
+                      <SelectItem value="COMMUNITY">Społeczność</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select value={dateFilter} onValueChange={setDateFilter}>
+                    <SelectTrigger className="w-[150px] flex-shrink-0">
+                      <SelectValue placeholder="Data" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Wszystkie daty</SelectItem>
+                      <SelectItem value="today">Dziś</SelectItem>
+                      <SelectItem value="tomorrow">Jutro</SelectItem>
+                      <SelectItem value="future">Później</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" size="icon" className="flex-shrink-0">
+                        <SlidersHorizontal className="h-4 w-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Sortuj</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuRadioGroup value={sortBy} onValueChange={setSortBy}>
+                        <DropdownMenuRadioItem value="date-asc">Data (od najwcześniejszej)</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="date-desc">Data (od najpóźniejszej)</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="title-asc">Nazwa (A-Z)</DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="title-desc">Nazwa (Z-A)</DropdownMenuRadioItem>
+                      </DropdownMenuRadioGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
+
+              {(topicFilter !== 'all' || dateFilter !== 'all' || sortBy !== 'date-asc' || showAIRecommendations) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={clearFiltersAndResetView}
+                >
+                  Wyczyść filtry
+                </Button>
+              )}
             </div>
 
             <div className="p-6 space-y-4 overflow-y-auto flex-1">
