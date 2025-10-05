@@ -59,7 +59,7 @@ const Map = ({ latitude, longitude, placeName, showAllEvents = false }: MapProps
 
     mapboxgl.accessToken = mapboxToken;
     
-    const centerLng = showAllEvents ? 19.9409 : (longitude || 19.9449);
+    const centerLng = showAllEvents ? 19.9209 : (longitude || 19.9449);
     const centerLat = showAllEvents ? 50.0647 : (latitude || 50.0647);
     const zoomLevel = showAllEvents ? 14 : 16;
 
