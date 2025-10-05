@@ -44,7 +44,7 @@ const Layout = ({
           ) : (
             <div className="flex-1 flex items-center justify-center gap-3">
               <img src={krakowGoLogo} alt="Krakow Go" className={`object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
-              <span className={`font-bold text-foreground ${!showBackButton ? 'text-2xl' : 'text-xl'}`}>×</span>
+              <span className={`font-bold text-muted-foreground ${!showBackButton ? 'text-2xl' : 'text-xl'}`}>×</span>
               <img src={mlodyKrakowLogo} alt="Młody Kraków" className={`object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
             </div>
           )}
