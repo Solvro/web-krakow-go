@@ -197,7 +197,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Spędzone godziny</p>
+              <p className="text-sm text-muted-foreground mb-2">Godziny</p>
               <p className="text-4xl font-bold text-primary">{totalHours} h</p>
             </div>
             <div className="bg-card rounded-xl p-6">
