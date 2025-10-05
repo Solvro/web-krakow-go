@@ -18,6 +18,7 @@ import EventDetails from "./pages/organizer/EventDetails";
 import Chats from "./pages/Chats";
 import ChatRoom from "./pages/ChatRoom";
 import Feed from "./pages/Feed";
+import CoordinatorDashboard from "./pages/coordinator/CoordinatorDashboard";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +54,11 @@ const App = () => (
             <Route path="/organizator" element={<OrganizerDashboard />} />
             <Route path="/organizator/nowe-wydarzenie" element={<NewEvent />} />
             <Route path="/organizator/wydarzenie/:id" element={<EventDetails />} />
+            <Route path="/koordynator" element={
+              <AuthGuard>
+                <CoordinatorDashboard />
+              </AuthGuard>
+            } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
