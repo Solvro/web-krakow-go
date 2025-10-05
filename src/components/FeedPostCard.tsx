@@ -4,6 +4,7 @@ import { Card } from '@/components/ui/card';
 import { Heart, Leaf, Users } from 'lucide-react';
 import { FeedPost } from '@/data/mockFeedPosts';
 import { useState } from 'react';
+import confetti from 'canvas-confetti';
 
 interface FeedPostCardProps {
   post: FeedPost;
@@ -28,6 +29,13 @@ const FeedPostCard = ({ post }: FeedPostCardProps) => {
     if (!congratulated) {
       setCongratulated(true);
       setLikes(likes + 1);
+      
+      // Trigger confetti animation
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
   };
 
