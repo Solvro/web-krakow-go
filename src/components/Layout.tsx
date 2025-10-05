@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Bell } from 'lucide-react';
+import { ArrowLeft, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import BottomNavigation from '@/components/BottomNavigation';
+import { useAuth } from '@/contexts/AuthContext';
 import krakowGoLogo from '@/assets/krakow-go-logo.png';
 import mlodyKrakowLogo from '@/assets/mlody-krakow-logo.png';
 
@@ -21,6 +22,12 @@ const Layout = ({
   showBottomNav = true 
 }: LayoutProps) => {
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col pb-24">
@@ -47,6 +54,18 @@ const Layout = ({
               <span className={`font-bold text-muted-foreground ${!showBackButton ? 'text-2xl' : 'text-xl'}`}>×</span>
               <img src={mlodyKrakowLogo} alt="Młody Kraków" className={`object-contain ${!showBackButton ? 'h-12' : 'h-10'}`} />
             </div>
+          )}
+
+          {isAuthenticated && (
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={handleLogout}
+              className="shrink-0"
+              title="Wyloguj"
+            >
+              <LogOut className="w-5 h-5" />
+            </Button>
           )}
         </div>
       </header>
