@@ -523,7 +523,7 @@ const OfferDetails = () => {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-semibold text-foreground mb-1">Data</h4>
-                  <p className="text-muted-foreground">{offer.date || `${offer.dateLabel}, ${offer.time}`}</p>
+                  <p className="text-muted-foreground">{new Date(offer.date).toLocaleDateString() || `${offer.dateLabel}, ${offer.time}`}</p>
                 </div>
               </div>
 
