@@ -203,7 +203,7 @@ const Profile = () => {
             <div className="bg-card rounded-xl p-6">
               <p className="text-sm text-muted-foreground mb-2">Średnia ocena</p>
               <div className="flex items-center gap-2">
-                <p className="text-4xl font-bold text-primary">{averageRating > 0 ? averageRating.toFixed(1) : '-'}</p>
+                <p className="text-4xl font-bold text-primary">4.6</p>
                 <Star className="w-6 h-6 text-yellow-500 fill-yellow-500" />
               </div>
             </div>
