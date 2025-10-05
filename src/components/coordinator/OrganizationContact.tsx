@@ -87,7 +87,7 @@ const OrganizationContact = ({ coordinatorId }: OrganizationContactProps) => {
       setMessage('');
     } catch (error) {
       console.error('Error sending recommendation:', error);
-      toast.error('Błąd podczas wysyłania rekomendacji');
+      toast.error('To na razie koncept :) Jeszcze nie działa');
     } finally {
       setLoading(false);
     }
