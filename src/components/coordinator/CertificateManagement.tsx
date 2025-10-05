@@ -172,7 +172,7 @@ const CertificateManagement = ({ schoolId }: CertificateManagementProps) => {
 
                 <Button
                   onClick={() => handleDownloadCertificate(cert)}
-                  variant="outline"
+                  variant="default"
                   size="default"
                   className="w-full"
                 >
