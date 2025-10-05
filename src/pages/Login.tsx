@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [userType, setUserType] = useState<'volunteer' | 'coordinator'>('volunteer');
+  const [userType, setUserType] = useState<'volunteer' | 'coordinator' | 'organizer'>('volunteer');
   const navigate = useNavigate();
   const location = useLocation();
   const { login, register } = useAuth();
@@ -41,6 +41,8 @@ const Login = () => {
       // Navigate based on user type
       if (userType === 'coordinator') {
         navigate('/koordynator', { replace: true });
+      } else if (userType === 'organizer') {
+        navigate('/organizator', { replace: true });
       } else {
         navigate(from, { replace: true });
       }
@@ -53,10 +55,13 @@ const Login = () => {
     }
   };
 
-  const handleQuickLogin = (type: 'volunteer' | 'coordinator') => {
+  const handleQuickLogin = (type: 'volunteer' | 'coordinator' | 'organizer') => {
     if (type === 'coordinator') {
       setEmail('koordynator@szkola.pl');
       setUserType('coordinator');
+    } else if (type === 'organizer') {
+      setEmail('organizator@ngo.pl');
+      setUserType('organizer');
     } else {
       setEmail('wolontariusz@example.com');
       setUserType('volunteer');
@@ -64,7 +69,7 @@ const Login = () => {
     setPassword('demo123');
     toast({
       title: "Demo",
-      description: `Wypełniono dane dla ${type === 'coordinator' ? 'koordynatora' : 'wolontariusza'}`,
+      description: `Wypełniono dane dla ${type === 'coordinator' ? 'koordynatora' : type === 'organizer' ? 'organizatora' : 'wolontariusza'}`,
     });
   };
 
@@ -173,7 +178,7 @@ const Login = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-3 gap-3">
                   <Button
                     type="button"
                     variant="outline"
@@ -189,6 +194,14 @@ const Login = () => {
                     onClick={() => handleQuickLogin('coordinator')}
                   >
                     Koordynator
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-14"
+                    onClick={() => handleQuickLogin('organizer')}
+                  >
+                    Organizator
                   </Button>
                 </div>
               </>
