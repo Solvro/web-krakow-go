@@ -331,7 +331,13 @@ const OrganizerDashboard = () => {
                             {school["Liczba uczniów ogółem"]} uczniów
                           </p>
                         </div>
-                        <Button variant="outline">
+                        <Button 
+                          variant="outline"
+                          onClick={() => toast({
+                            title: "To na razie koncept :)",
+                            description: "Jeszcze nie działa"
+                          })}
+                        >
                           Skontaktuj się z koordynatorem
                         </Button>
                       </div>
