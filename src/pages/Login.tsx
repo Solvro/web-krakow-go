@@ -13,6 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [userType, setUserType] = useState<'volunteer' | 'coordinator'>('volunteer');
   const navigate = useNavigate();
   const location = useLocation();
   const { login, register } = useAuth();
@@ -36,7 +37,13 @@ const Login = () => {
           description: "Możesz teraz zgłaszać się do wydarzeń.",
         });
       }
-      navigate(from, { replace: true });
+      
+      // Navigate based on user type
+      if (userType === 'coordinator') {
+        navigate('/koordynator', { replace: true });
+      } else {
+        navigate(from, { replace: true });
+      }
     } catch (error) {
       toast({
         title: "Błąd",
@@ -44,6 +51,21 @@ const Login = () => {
         variant: "destructive",
       });
     }
+  };
+
+  const handleQuickLogin = (type: 'volunteer' | 'coordinator') => {
+    if (type === 'coordinator') {
+      setEmail('koordynator@szkola.pl');
+      setUserType('coordinator');
+    } else {
+      setEmail('wolontariusz@example.com');
+      setUserType('volunteer');
+    }
+    setPassword('demo123');
+    toast({
+      title: "Demo",
+      description: `Wypełniono dane dla ${type === 'coordinator' ? 'koordynatora' : 'wolontariusza'}`,
+    });
   };
 
   return (
@@ -137,6 +159,40 @@ const Login = () => {
             >
               {isLogin ? 'Zaloguj się' : 'Zarejestruj się'}
             </Button>
+
+            {isLogin && (
+              <>
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-border" />
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="bg-background px-4 text-muted-foreground">
+                      Szybkie logowanie DEMO
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-14"
+                    onClick={() => handleQuickLogin('volunteer')}
+                  >
+                    Wolontariusz
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-14"
+                    onClick={() => handleQuickLogin('coordinator')}
+                  >
+                    Koordynator
+                  </Button>
+                </div>
+              </>
+            )}
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
