@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Layout from '@/components/Layout';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Calendar, Pencil } from 'lucide-react';
+import { Calendar, Pencil, TrendingUp } from 'lucide-react';
 import BadgeCard from '@/components/BadgeCard';
 import { mockBadges } from '@/data/mockBadges';
 import { api } from '@/services/api';
@@ -186,7 +186,13 @@ const Profile = () => {
           </div>
           <div className="bg-card rounded-xl p-6">
             <h2 className="text-sm font-medium mb-2 text-muted-foreground">Miejsce w rankingu</h2>
-            <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
+            <div className="flex items-center gap-3">
+              <p className="text-4xl font-bold text-primary">#{Math.max(1, 15 - volunteer.points)}</p>
+              <div className="flex items-center gap-1 text-green-500">
+                <TrendingUp className="w-5 h-5" />
+                <span className="text-sm font-semibold">+2</span>
+              </div>
+            </div>
           </div>
         </div>
 
