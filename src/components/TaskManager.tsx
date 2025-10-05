@@ -91,7 +91,7 @@ const TaskManager = ({ eventId, approvedVolunteers }: TaskManagerProps) => {
         description: task.description || '',
         startDate: new Date(task.startDate).toISOString().slice(0, 16),
         endDate: new Date(task.endDate).toISOString().slice(0, 16),
-        volunteerId: task.volunteerId || ''
+        volunteerId: task.volunteerId || 'unassigned'
       });
     } else {
       setEditingTask(null);
@@ -100,7 +100,7 @@ const TaskManager = ({ eventId, approvedVolunteers }: TaskManagerProps) => {
         description: '',
         startDate: '',
         endDate: '',
-        volunteerId: ''
+        volunteerId: 'unassigned'
       });
     }
     setIsDialogOpen(true);
@@ -123,7 +123,7 @@ const TaskManager = ({ eventId, approvedVolunteers }: TaskManagerProps) => {
         description: formData.description || null,
         startDate: new Date(formData.startDate).toISOString(),
         endDate: new Date(formData.endDate).toISOString(),
-        volunteerId: formData.volunteerId || null,
+        volunteerId: formData.volunteerId === 'unassigned' ? null : formData.volunteerId || null,
         updatedAt: new Date().toISOString(),
         isCompleted: false
       };
@@ -322,7 +322,7 @@ const TaskManager = ({ eventId, approvedVolunteers }: TaskManagerProps) => {
                     <SelectValue placeholder="Wybierz wolontariusza..." />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Nie przypisany</SelectItem>
+                    <SelectItem value="unassigned">Nie przypisany</SelectItem>
                     {approvedVolunteers.map((volunteer) => (
                       <SelectItem key={volunteer.id} value={volunteer.id}>
                         {volunteer.name}
