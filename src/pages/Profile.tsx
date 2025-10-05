@@ -186,7 +186,7 @@ const Profile = () => {
           
           <div className="text-center">
             <h1 className="text-2xl font-bold">{volunteer.name}</h1>
-            <p className="text-muted-foreground">{age} lata</p>
+            <p className="text-muted-foreground">{age} lat</p>
             <p className="text-muted-foreground">{volunteer.email}</p>
             {schoolName && <p className="text-muted-foreground">{schoolName}</p>}
           </div>
