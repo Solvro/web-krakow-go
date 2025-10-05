@@ -2,6 +2,9 @@
 
 Aplikacja webowa naszego projektu na [HackYeah 2025](https://challengerocket.com/hackyeah-2025) w zadaniu "Krakow Digital Volunteer Centre – application".
 
+Filmik: <https://youtu.be/-4Og5aaiHfw>
+Prezentacja: <https://www.canva.com/design/DAG03mKpDyc/ZtBp2gMINsfy4Oy8tE0nkg/edit>
+
 ## Team
 
 - Bartosz Gotowski - Fullstack Developer i Product Owner
