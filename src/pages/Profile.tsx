@@ -198,11 +198,11 @@ const Profile = () => {
             </div>
             <div className="bg-card rounded-xl p-6">
               <p className="text-sm text-muted-foreground mb-2">Szacunkowe godziny</p>
-              <p className="text-4xl font-bold">{totalHours}</p>
+              <p className="text-4xl font-bold text-primary">{totalHours}</p>
             </div>
             <div className="bg-card rounded-xl p-6">
               <p className="text-sm text-muted-foreground mb-2">Certyfikaty</p>
-              <p className="text-4xl font-bold">{volunteer.certificates.length}</p>
+              <p className="text-4xl font-bold text-primary">{volunteer.certificates.length}</p>
             </div>
           </div>
         </div>
