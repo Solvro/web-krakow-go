@@ -28,9 +28,13 @@ interface EventWithSubmissions extends Event {
 }
 
 interface School {
-  id: string;
-  nazwa: string;
-  liczba_uczniow: number;
+  Lp: number;
+  "Numer RSPO": number;
+  "Nazwa szkoły_placówki": string;
+  "Liczba uczniów ogółem": number;
+  "Liczba oddziałów ogółem": number;
+  Telefon: string;
+  [key: string]: any;
 }
 
 const OrganizerDashboard = () => {
@@ -111,10 +115,13 @@ const OrganizerDashboard = () => {
           'accept': 'application/json'
         }
       });
-      const data = await response.json();
+      const result = await response.json();
       
-      // Sort by number of students (descending)
-      const sortedSchools = data.sort((a: School, b: School) => b.liczba_uczniow - a.liczba_uczniow);
+      // Extract the value array and sort by number of students (descending)
+      const schoolsArray = result.value || [];
+      const sortedSchools = schoolsArray.sort((a: School, b: School) => 
+        b["Liczba uczniów ogółem"] - a["Liczba uczniów ogółem"]
+      );
       setSchools(sortedSchools);
     } catch (error) {
       console.error('Error fetching schools:', error);
@@ -137,7 +144,7 @@ const OrganizerDashboard = () => {
   };
 
   const filteredSchools = schools.filter(school => 
-    school.nazwa.toLowerCase().includes(searchQuery.toLowerCase())
+    school["Nazwa szkoły_placówki"].toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   if (isLoading) {
@@ -302,14 +309,14 @@ const OrganizerDashboard = () => {
                 </Card>
               ) : (
                 filteredSchools.map((school) => (
-                  <Card key={school.id} className="hover:shadow-md transition-shadow">
+                  <Card key={school["Numer RSPO"]} className="hover:shadow-md transition-shadow">
                     <CardContent className="py-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="flex-1">
-                          <h3 className="font-semibold text-foreground mb-1">{school.nazwa}</h3>
+                          <h3 className="font-semibold text-foreground mb-1">{school["Nazwa szkoły_placówki"]}</h3>
                           <p className="text-sm text-muted-foreground">
                             <Users className="w-4 h-4 inline mr-1" />
-                            {school.liczba_uczniow} uczniów
+                            {school["Liczba uczniów ogółem"]} uczniów
                           </p>
                         </div>
                         <Button variant="outline">
