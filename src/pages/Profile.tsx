@@ -182,7 +182,7 @@ const Profile = () => {
         <div>
           <h2 className="text-lg font-semibold mb-4">Statystyki</h2>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-card rounded-xl p-6">
+            <div className="bg-card flex flex-col justify-between rounded-xl p-6">
               <p className="text-sm text-muted-foreground mb-2">Punkty</p>
               <p className="text-4xl font-bold text-primary">{volunteer.points}</p>
             </div>
@@ -197,7 +197,7 @@ const Profile = () => {
               </div>
             </div>
             <div className="bg-card rounded-xl p-6">
-              <p className="text-sm text-muted-foreground mb-2">Godziny</p>
+              <p className="text-sm text-muted-foreground mb-2">Spędzone godziny</p>
               <p className="text-4xl font-bold text-primary">{totalHours} h</p>
             </div>
             <div className="bg-card rounded-xl p-6">
