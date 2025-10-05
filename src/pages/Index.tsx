@@ -49,7 +49,7 @@ const Index = () => {
     setIsLoadingRecommendations(true);
     try {
       // Mock volunteer ID - in production, get from auth context
-      const volunteerId = '1';
+      const volunteerId = 'vol-ania';
       
       const { data, error } = await supabase.functions.invoke('get-event-recommendations', {
         body: { 
