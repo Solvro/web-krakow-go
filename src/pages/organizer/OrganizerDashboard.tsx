@@ -106,7 +106,11 @@ const OrganizerDashboard = () => {
   const fetchSchools = async () => {
     try {
       setIsLoadingSchools(true);
-      const response = await fetch('https://api.um.krakow.pl/opendata-oswiata-szkoly-ponadpodstawowe-liczba-uczniow/v1/uczniowie-szkoly-ponadpodstawowe-samorzadowe-2024-2025');
+      const response = await fetch('https://api.um.krakow.pl/opendata-oswiata-szkoly-ponadpodstawowe-liczba-uczniow/v1/uczniowie-szkoly-ponadpodstawowe-samorzadowe-2024-2025', {
+        headers: {
+          'accept': 'application/json'
+        }
+      });
       const data = await response.json();
       
       // Sort by number of students (descending)
